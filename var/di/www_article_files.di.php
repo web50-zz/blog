@@ -149,7 +149,6 @@ class di_www_article_files extends data_interface
 		$from_source = $this->get_args('source',false);
 		if ($fid > 0)
 		{
-			var_dump('iseacrhing data for '.$fld);
 			$this->_flush();
 			$this->_get();
 			$file = $this->get_results(0);
