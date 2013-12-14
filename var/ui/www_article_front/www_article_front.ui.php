@@ -107,9 +107,11 @@ class ui_www_article_front extends user_interface
 		$page = request::get('page', 1);
 		$category_id = $this->get_args('category_id','');
 		$enable_pager = $this->get_args('pager',false);
+		$sort = $this->get_args('sort','release_date');
+		$dir = $this->get_args('dir','DESC');
 		$this->args['srch'] = array(
-			'sort'=>'release_date',
-			'dir'=>'DESC',
+			'sort'=>$sort,
+			'dir'=>$dir,
 			'start' => ($page - 1) * $limit,
 			'post_type'=>$post_type,
 			'limit'=>$limit,
