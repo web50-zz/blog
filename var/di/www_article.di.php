@@ -52,11 +52,19 @@ class di_www_article extends data_interface
 	protected function sys_list()
 	{
 		$this->_flush();
+		$di = $this->join_with_di('www_article_post_types',array('post_type'=>'id'),array('title'=>'post_type_title'));
 		if($this->args['by_category'] == true)
 		{
 			$this->sys_search_by_category();
 		}
-		$this->extjs_grid_json(array('id', 'order', 'uri', 'title','release_date'));
+		$what = array('id', 
+				'order', 
+				'uri', 
+				'title',
+				'post_type',
+				array('di'=>$di,'name'=>'title'),
+				'release_date');
+		$this->extjs_grid_json($what);
 	}
 	
 	/**
