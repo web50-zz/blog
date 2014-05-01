@@ -5,6 +5,7 @@ CREATE TABLE `www_article_indexer` (
   `title` varchar(255) NOT NULL,
   `uri` varchar(255) NOT NULL,
   `source` varchar(200) NOT NULL,
+  `brief` text NOT NULL,
   `content` text NOT NULL,
   `published` tinyint(1) unsigned NOT NULL,
   `author` varchar(255) NOT NULL,

@@ -1,6 +1,6 @@
 ui.www_article.form = Ext.extend(Ext.form.FormPanel, {
 	formWidth: 900,
-	formHeight: 600,
+	formHeight: 700,
 
 	loadText: 'Загрузка данных формы',
 	lblTitle: 'Заголовок',
@@ -128,10 +128,15 @@ ui.www_article.form = Ext.extend(Ext.form.FormPanel, {
 							store: new Ext.data.SimpleStore({ fields: ['value', 'title'], data: [[1, 'Да'], [0, 'Нет']] }),
 							valueField: 'value', displayField: 'title', mode: 'local', triggerAction: 'all', selectOnFocus: true, editable: false
 						},
-						{fieldLabel: this.lblRlsDate, name: 'release_date', width: 100, format: 'Y-m-d H:i:s', allowBlank: false, xtype: 'datefield'},
+						{fieldLabel: this.lblRlsDate, name: 'release_date', width: 100, format: 'Y-m-d H:i:s', allowBlank: true, xtype: 'datefield'},
 						{fieldLabel: this.lblSource, name: 'source', maxLength: 64, maxLengthText: 'Не больше 64 символов'},
 						{fieldLabel: this.lblAuthor, name: 'author', maxLength: 255, maxLengthText: 'Не больше 255 символов'},
 						{fieldLabel: this.lblURI, name: 'uri', maxLength: 255, maxLengthText: 'Не больше 255 символов',allowBlank:false},
+						{hideLabel: true, name: 'brief', xtype: 'ckeditor', CKConfig: {
+							height: 60,
+							toolbar: 'Basic',
+							filebrowserImageBrowseUrl: 'ui/file_manager/browser.html'
+						}},
 						{fieldLabel: this.lblCategory, xtype: 'compositefield', items: [
 							{xtype: 'button', iconCls: 'add', text:'Добавить изображение из загруженных',listeners: {click: function(){this.fireEvent('insert_image')}, scope: this}},
 							{xtype: 'displayfield', name: 'some_image'}

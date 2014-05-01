@@ -130,6 +130,16 @@ class ui_www_article_front extends user_interface
 		return $this->parse_tmpl($template,$data);
 	}
 
+	//9* 01052014 получаем публикацию по ID
+	public function pub_get_item()
+	{
+		$template = $this->get_args('template','item.html');
+		$di =  data_interface::get_instance('www_article_indexer');
+		$id = $this->get_args('_sid',0);
+		$data = $di->get_record($id);
+		return $this->parse_tmpl($template,$data);
+	}
+
 	public function get_item($id)
 	{
 		$template = $this->get_args('template','item.html');

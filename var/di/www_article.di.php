@@ -36,6 +36,7 @@ class di_www_article extends data_interface
 		'source' => array('type' => 'string'),
 		'author' => array('type' => 'string'),
 		'uri' => array('type' => 'string'),
+		'brief' => array('type' => 'text'),
 		'content' => array('type' => 'text'),
 		'published' => array('type' => 'integer'),
 	);
