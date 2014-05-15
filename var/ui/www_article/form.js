@@ -192,7 +192,16 @@ ui.www_article.form = Ext.extend(Ext.form.FormPanel, {
 						var real_name  =  row.get('real_name');
 						var url = row.get('url');
 						var path = url + real_name;
-						CKEDITOR.instances[ck_id].insertHtml('<img src="'+path+'"/>');
+						var is_image =  row.get('is_image');
+						var title =  row.get('title');
+						if(is_image == 1)
+						{
+							CKEDITOR.instances[ck_id].insertHtml('<img src="'+path+'"/>');
+						}
+						else
+						{
+							CKEDITOR.instances[ck_id].insertHtml('<a href="'+path+'">'+title+'</a>');
+						}
 						w.destroy();
 					},
 					scope: this
