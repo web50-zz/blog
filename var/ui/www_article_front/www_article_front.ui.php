@@ -53,7 +53,7 @@ class ui_www_article_front extends user_interface
 		$page = request::get('page', 1);
 		$limit = $this->get_args('limit',5);
 		$post_type = $this->get_args('post_type',1);
-		$template = $this->get_args('template','list.html');
+		$template = $this->get_args('list_template','list.html');
 		$di =  data_interface::get_instance('www_article_indexer');
 		$this->args['srch'] = array(
 			'tag'=>$tag,
@@ -78,22 +78,28 @@ class ui_www_article_front extends user_interface
 		$di =  data_interface::get_instance('www_article_indexer');
 		$limit = $this->get_args('limit',5);
 		$post_type = $this->get_args('post_type',1);
-		$post_tmpl = $this->get_args('tmpl','list.html');
+		$post_tmpl = $this->get_args('list_template','list.html');
 		$page = request::get('page', 1);
 		$this->args['srch'] = array(
-			'category_id'=>$id,
 			'sort'=>'release_date',
 			'dir'=>'DESC',
 			'start' => ($page - 1) * $limit,
 			'post_type'=>$post_type,
 			'limit'=>$limit,
 		);
+		if($id>0)
+		{
+			$this->args['category_id'] = $id;
+		}
 		$this->prepare_search();
 		$data = $di->get_list_by_srch($this->args['srch']);
-		$pager = user_interface::get_instance('pager');
-		$st=user_interface::get_instance('structure');
-		$st->collect_resources($pager,'pager');
-		$data['pager'] =$pager->get_pager(array('page' => $page, 'total' => $data['total'], 'limit' => $limit, 'prefix' => $_SERVER['QUERY_STRING']));
+		if($enable_pager == true)
+		{
+			$pager = user_interface::get_instance('pager');
+			$st=user_interface::get_instance('structure');
+			$st->collect_resources($pager,'pager');
+			$data['pager'] =$pager->get_pager(array('page' => $page, 'total' => $data['total'], 'limit' => $limit, 'prefix' => $_SERVER['QUERY_STRING']));
+		}
 		return $this->parse_tmpl($post_tmpl,$data);
 
 	}
@@ -142,7 +148,7 @@ class ui_www_article_front extends user_interface
 
 	public function get_item($id)
 	{
-		$template = $this->get_args('template','item.html');
+		$template = $this->get_args('post_template','item.html');
 		$di =  data_interface::get_instance('www_article_indexer');
 		$data = $di->get_record($id);
 		return $this->parse_tmpl($template,$data);
