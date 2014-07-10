@@ -1,6 +1,6 @@
 ui.www_article.form = Ext.extend(Ext.form.FormPanel, {
 	formWidth: 900,
-	formHeight: 700,
+	formHeight: 500,
 
 	loadText: 'Загрузка данных формы',
 	lblTitle: 'Заголовок',
