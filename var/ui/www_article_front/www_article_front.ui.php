@@ -155,9 +155,11 @@ class ui_www_article_front extends user_interface
 	public function pub_get_item()
 	{
 		$template = $this->get_args('template','item.html');
+		$args = $this->get_args();
 		$di =  data_interface::get_instance('www_article_indexer');
 		$id = $this->get_args('_sid',0);
 		$data = $di->get_record($id);
+		$data->args = $args;
 		return $this->parse_tmpl($template,$data);
 	}
 
