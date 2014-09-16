@@ -148,6 +148,9 @@ class ui_www_article_front extends user_interface
 			$st->collect_resources($pager,'pager');
 			$data['pager'] =$pager->get_pager(array('page' => $page, 'total' => $data['total'], 'limit' => $limit, 'prefix' => $_SERVER['QUERY_STRING']));
 		}
+		$data['args'] = $this->args;
+		$data['PAGE_URI'] = PAGE_URI;
+		$data['SRHC_URI'] = SRCH_URI;
 		return $this->parse_tmpl($template,$data);
 	}
 
