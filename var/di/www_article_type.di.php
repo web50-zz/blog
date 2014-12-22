@@ -579,7 +579,6 @@ class di_www_article_type extends data_interface
 			array('di'=>$d2,'name'=>'name'),
 			array('di'=>$d2,'name'=>'title'),
 		);
-		$this->connector->debug = true;
 		$this->data =  $this->extjs_grid_json($flds,false);
 		$this->get_childs(0);
 		$this->correct_links();

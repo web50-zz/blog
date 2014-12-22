@@ -129,7 +129,6 @@ class di_www_article_url_indexer extends data_interface
 		
 		), true);
 		$this->insert_on_empty = true;
-//		$this->connector->debug = true;
 		$this->_set();
 		$this->pop_args();
 
