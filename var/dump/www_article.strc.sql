@@ -6,7 +6,7 @@ CREATE TABLE `www_article` (
   `author` varchar(255) NOT NULL DEFAULT '',
   `source` varchar(255) NOT NULL,
   `brief` text NOT NULL,
-  `content` text NOT NULL,
+  `content` longtext NOT NULL,
   `uri` varchar(255) NOT NULL DEFAULT '',
   `unique_visitors` mediumint(8) unsigned NOT NULL,
   `total_visitors` mediumint(8) unsigned NOT NULL,
