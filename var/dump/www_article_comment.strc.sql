@@ -6,6 +6,7 @@ CREATE TABLE `www_article_comment` (
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `subject` varchar(255) NOT NULL,
+  `comment` mediumtext NOT NULL,
   `author_name` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `public` (`published`),

@@ -91,7 +91,11 @@ class di_www_article_comment extends data_interface
 			'published',
 			'item_id',
 			array('di' => $art, 'name' => 'title'),
-			'name'
+			"IF(`".$this->get_alias()."`.published ='1','Опубликовано','Не опубликовано') as pub_stat",
+			'name',
+			'subject',
+			'author_name',
+
 		));
 	}
 	
@@ -109,11 +113,20 @@ class di_www_article_comment extends data_interface
 	*	Сохранить данные и вернуть JSON-пакет для ExtJS
 	* @access protected
 	*/
-	protected function sys_set()
+	public function sys_set($silent = false)
 	{
 		$this->_flush();
+		if(!$this->args['_sid'])
+		{
+			$this->args['created_datetime'] = date('Y-m-d H:i:s');
+		}
 		$this->insert_on_empty = true;
-		$this->extjs_set_json();
+		$res =	$this->extjs_set_json(false,false);
+		if($silent == true)
+		{
+			return $res;
+		}
+		response::send($res,'json');
 	}
 
 	/**

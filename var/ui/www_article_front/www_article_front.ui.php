@@ -255,7 +255,15 @@ class ui_www_article_front extends user_interface
 		return array($prev,$next);
 	}
 
-
+	public function pub_comment()
+	{
+		$di = data_interface::get_instance('www_article_comment');
+		$di->_flush();
+		$di->set_args(request::get(array()));
+		$di->sys_set(true);
+		echo('Спасибо за ваше обращение.');
+		die();
+	}
 	public function pub_trunc()
 	{
 		$st = data_interface::get_instance('structure');

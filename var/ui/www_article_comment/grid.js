@@ -42,10 +42,9 @@ ui.www_article_comment.grid = Ext.extend(Ext.grid.EditorGridPanel, {
 					}, [
 						{name: 'id', type: 'int'},
 						{name: 'order', type: 'int'},
-						{name: 'file_type', type: 'int'},
-						'file_type_str',
-						'is_image',
-						'title', 'real_name', 'url'
+						{name: 'published', type: 'int'},
+						'pub_stat',
+						'title', 'subject','author_name' 
 					]
 				),
 				writer: new Ext.data.JsonWriter({
@@ -78,9 +77,9 @@ ui.www_article_comment.grid = Ext.extend(Ext.grid.EditorGridPanel, {
 				},
 				columns: [
 					{header: 'ID', dataIndex: 'id', hidden: true},
-					{header: this.clmnImage, dataIndex: 'title', width: 120, xtype: 'templatecolumn', tpl: image},
-					{header: this.clmnTitle,  dataIndex: 'title', width:120},
-					{header: this.clmnFt,  dataIndex: 'file_type_str', id: 'expand'}
+					{header: 'Опубликовано',  dataIndex: 'pub_stat', width:120},
+					{header: 'Автор',  dataIndex: 'author_name'},
+					{header: 'Тема',  dataIndex: 'subject', id: 'expand'}
 				]
 			})
 		});
