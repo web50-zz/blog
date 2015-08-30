@@ -298,8 +298,8 @@ ui.www_article.form = Ext.extend(Ext.form.FormPanel, {
 		var app = new App({waitMsg: 'Загрузка формы'});
 		app.on({
 			apploaded: function(){
-				var f = new ui.www_article_comment.main_grid();
-				f.setParams({'_sarticle_id':vals._sid});
+				var f = new ui.www_article_comment.main();
+				f.setParams({'_sitem_id':vals._sid});
 				var w = new Ext.Window({iconCls: b.iconCls, title: b.text, maximizable: true, modal: true, layout: 'fit', width: 500, height: 400, items: f});
 				f.on({
 					cancelled: function(){w.destroy()},
@@ -310,7 +310,7 @@ ui.www_article.form = Ext.extend(Ext.form.FormPanel, {
 			apperror: showError,
 			scope: this
 		});
-		app.Load('www_article_comment', 'main_grid');
+		app.Load('www_article_comment', 'main');
 	},
 
 	/**
