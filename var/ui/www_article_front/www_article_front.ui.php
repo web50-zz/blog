@@ -260,9 +260,17 @@ class ui_www_article_front extends user_interface
 		$di = data_interface::get_instance('www_article_comment');
 		$di->_flush();
 		$di->set_args(request::get(array()));
-		$di->sys_set(true);
-		echo('Спасибо за ваше обращение.');
-		die();
+		$req = request::get();
+		$headers = getallheaders();
+		if($headers['X-Requested-With'] == 'XMLHttpRequest')
+		{
+			if($req['item_id'] >0 && $req['email'] != '' && $req['author_name'] != '')
+			{
+				$di->sys_set(true);
+			}
+			response::send('Спасибо за ваше обращение.','text');
+		}
+		return false;
 	}
 	public function pub_trunc()
 	{
