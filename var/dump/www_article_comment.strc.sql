@@ -10,5 +10,5 @@ CREATE TABLE `www_article_comment` (
   `author_name` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `public` (`published`),
-  KEY `article_id` (`article_id`)
+  KEY `item_id` (`item_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8
