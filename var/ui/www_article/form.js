@@ -107,7 +107,7 @@ ui.www_article.form = Ext.extend(Ext.form.FormPanel, {
 					items: [
 						{name: '_sid', xtype: 'hidden'},
 						{fieldLabel: this.lblId, name: 'id', xtype: 'displayfield'},
-						{fieldLabel: this.lblTitle, name: 'title', maxLength: 255, maxLengthText: 'Не больше 255 символов'},
+						{fieldLabel: this.lblTitle, name: 'title', maxLength: 255, maxLengthText: 'Не больше 255 символов',allowBlank: false},
 						{fieldLabel: this.lblPostType, hiddenName: 'post_type', xtype: 'combo', allowBlank: false,
 							valueField: 'id', displayField: 'title', value: '1', emptyText: '', 
 							store: new Ext.data.JsonStore({url: 'di/www_article_post_types/type_list.json', root: 'records', fields: ['id', 'title'], autoLoad: true,
@@ -131,7 +131,7 @@ ui.www_article.form = Ext.extend(Ext.form.FormPanel, {
 						{fieldLabel: this.lblRlsDate, name: 'release_date', width: 100, format: 'Y-m-d H:i:s', allowBlank: true, xtype: 'datefield'},
 						{fieldLabel: this.lblSource, name: 'source', maxLength: 64, maxLengthText: 'Не больше 64 символов'},
 						{fieldLabel: this.lblAuthor, name: 'author', maxLength: 255, maxLengthText: 'Не больше 255 символов'},
-						{fieldLabel: this.lblURI, name: 'uri', maxLength: 255, maxLengthText: 'Не больше 255 символов',allowBlank:false},
+						{fieldLabel: this.lblURI, name: 'uri', maxLength: 255, maxLengthText: 'Не больше 255 символов'},
 						{hideLabel: true, name: 'brief', xtype: 'ckeditor', CKConfig: {
 							height: 60,
 							toolbar: 'Basic',

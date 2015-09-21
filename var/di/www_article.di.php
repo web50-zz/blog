@@ -85,9 +85,10 @@ class di_www_article extends data_interface
 		$silent = $this->get_args('silent',false);
 		try{
 			$this->check_input();
-			$this->check_uniq_uri($this->args['uri']);
-			$di = data_interface::get_instance('www_article_type');
-			$di->check_uniq_uri($this->args['uri']);
+			// ниже больше не надо
+		//	$this->check_uniq_uri($this->args['uri']);
+		//	$di = data_interface::get_instance('www_article_type');
+		//	$di->check_uniq_uri($this->args['uri']);
 			if ($fid > 0)
 			{
 				$this->_flush();
@@ -96,6 +97,7 @@ class di_www_article extends data_interface
 			}
 			$file = array();
 			$args =  $this->get_args();
+			$args['uri'] = $this->prepare_uri();
 			if (!($fid > 0))
 			{
 				$args['order'] = $this->get_new_order();
@@ -243,10 +245,44 @@ class di_www_article extends data_interface
 	public function check_input()
 	{
 		$args = $this->args;
-		if(!preg_match('/^[a-zA-Z1-90\-_]+$/',$args['uri']))
+		if($args['uri'] != '')
 		{
-			throw new Exception('URI может содержать только латинские буквы, цифры  и символы _ -. Пробелы не допустимы');
+			if(!preg_match('/^[a-zA-Z1-90\-_]+$/',$args['uri']))
+			{
+			//			throw new Exception('URI может содержать только латинские буквы, цифры  и символы _ -. Пробелы не допустимы');
+			}
 		}
+	}
+
+	protected function prepare_uri()
+	{
+		$config = array();
+		$name = $this->get_args('uri');
+		$title = $this->get_args('title');
+		$id = $this->get_args('_sid');
+		$di = data_interface::get_instance('www_url_utils');
+		$config = array(
+			'www_article'=>array(
+					'field'=>'uri',
+					'id'=>$id
+				),
+			'www_article_type'=>array(
+					'field'=>'name'
+				),
+			);
+		if($name == '')
+		{
+			$name = $title;
+		}
+
+		try{
+			$uri = $di->prepare_uri($config,$name);
+		}
+		catch(exception $e)
+		{
+			dbg::write($e->getMessage());
+		}
+		return $uri;
 	}
 
 }
