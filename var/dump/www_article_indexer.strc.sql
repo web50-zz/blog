@@ -15,6 +15,7 @@ CREATE TABLE `www_article_indexer` (
   `images` text NOT NULL,
   `unique_visitors` mediumint(8) unsigned NOT NULL,
   `total_visitors` mediumint(8) unsigned NOT NULL,
+  `comments` text NOT NULL,
   `like` mediumint(8) unsigned NOT NULL,
   `dislike` mediumint(8) unsigned NOT NULL,
   PRIMARY KEY (`id`),

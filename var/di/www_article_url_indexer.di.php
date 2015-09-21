@@ -30,6 +30,7 @@ class di_www_article_url_indexer extends data_interface
 		'id' => array('type' => 'integer', 'serial' => TRUE, 'readonly' => TRUE),
 		'url' => array('type' => 'string'),
 		'item_id' => array('type' => 'integer'),
+		'post_type' => array('type' => 'integer'),
 		'category_id' => array('type' => 'integer'),
 	);
 
@@ -96,6 +97,7 @@ class di_www_article_url_indexer extends data_interface
 		$di->what = array(
 			'id' => 'item_id',
 			'uri'=>'url',
+			'post_type'=>'post_type',
 		);
 		$di->push_args(array('_sid' => $item_id));
 		$di->_get();

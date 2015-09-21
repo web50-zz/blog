@@ -11,11 +11,9 @@ class ui_www_article_comment extends user_interface
 
 	protected $deps = array(
 		'main' => array(
-			'www_article_comment.main_grid',
-			'www_article_comment.main_filter',
-		),
-		'main_grid' => array(
 			'www_article_comment.grid',
+		),
+		'grid' => array(
 		),
 	);
 	

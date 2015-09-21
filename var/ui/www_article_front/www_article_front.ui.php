@@ -49,13 +49,22 @@ class ui_www_article_front extends user_interface
 			$this->detected_category = $res['category_id'];
 			return $this->get_post_list($res['category_id']);
 		}
-		return 'Not found';
+		if($res['id'] == 0 && SRCH_URI == '')
+		{
+			$possible_records =  $this->get_post_list();
+			if($possible_records != false)
+			{
+				return $possible_records;
+			}
+		}
+		return 'Ничего не найдено';
 	}
 
 	public function pub_locator()
 	{
 		$di = data_interface::get_instance('www_article_url_indexer');
-		$res = $di->search_by_uri('/'.SRCH_URI);
+		$args = $this->get_args();
+		$res = $di->search_by_uri('/'.SRCH_URI,false,$args);
 		$this->location = $res;
 	}
 
@@ -108,6 +117,10 @@ class ui_www_article_front extends user_interface
 		}
 		$this->prepare_search();
 		$data = $di->get_list_by_srch($this->args['srch']);
+		if(count($data['records']) == 0)
+		{
+			$enable_pager = false;
+		}
 		if($enable_pager == true)
 		{
 			$pager = user_interface::get_instance('pager');
@@ -242,7 +255,23 @@ class ui_www_article_front extends user_interface
 		return array($prev,$next);
 	}
 
-
+	public function pub_comment()
+	{
+		$di = data_interface::get_instance('www_article_comment');
+		$di->_flush();
+		$di->set_args(request::get(array()));
+		$req = request::get();
+		$headers = getallheaders();
+		if($headers['X-Requested-With'] == 'XMLHttpRequest')
+		{
+			if($req['item_id'] >0 && $req['email'] != '' && $req['author_name'] != '')
+			{
+				$di->sys_set(true);
+			}
+			response::send('Спасибо за ваше обращение.','text');
+		}
+		return false;
+	}
 	public function pub_trunc()
 	{
 		$st = data_interface::get_instance('structure');

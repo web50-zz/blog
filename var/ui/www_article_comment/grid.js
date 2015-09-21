@@ -1,13 +1,4 @@
 ui.www_article_comment.grid = Ext.extend(Ext.grid.EditorGridPanel, {
-	clmnTitle: 'Наименование',
-	clmnReg: 'Регион',
-	clmnCty: 'Город',
-	clmnZastr: 'Застройщик',
-	clmnCreat: 'Дата внесения',
-	clmnChang: 'Дата изменения',
-	pagerSize: 500,
-	pagerEmptyMsg: 'Нет записей',
-	pagerDisplayMsg: 'Записи с {0} по {1}. Всего: {2}',
 	setParams: function(params, reload){
 		var s = this.getStore();
 		params = params || {};
@@ -23,21 +14,23 @@ ui.www_article_comment.grid = Ext.extend(Ext.grid.EditorGridPanel, {
 		if (reload) s.load({params:{start: 0, limit: this.pagerSize}});
 	},
 	getKey: function(){
-		return this.getStore().baseParams._scompany_id;
+		return this.getStore().baseParams._sitem_id;
 	},
 	/**
 	 * @constructor
 	 */
 	constructor: function(config)
 	{
+		var image = new Ext.XTemplate('<tpl if="is_image == 1"><img src="{url}{prefix}{real_name}" width="92" border="0"/></tpl>');
+		image.compile();
 		Ext.apply(this, {
 			store: new Ext.data.Store({
 				proxy: new Ext.data.HttpProxy({
 					api: {
+						read: 'di/www_article_comment/list.js',
 						create: 'di/www_article_comment/set.js',
 						update: 'di/www_article_comment/mset.js',
-						destroy: 'di/www_article_comment/unset.js',
-						read: 'di/www_article_comment/list.js'
+						destroy: 'di/www_article_comment/unset.js'
 					}
 				}),
 				reader: new Ext.data.JsonReader({
@@ -48,11 +41,10 @@ ui.www_article_comment.grid = Ext.extend(Ext.grid.EditorGridPanel, {
 						messageProperty: 'errors'
 					}, [
 						{name: 'id', type: 'int'},
-						{name: 'created_datetime', type: 'date', dateFormat: 'Y-m-d H:i:s'},
-						{name: 'public', type: 'int'},
-						{name: 'article_id', type: 'int'},
-						'title',
-						'name'
+						{name: 'order', type: 'int'},
+						{name: 'published', type: 'int'},
+						'pub_stat',
+						'title', 'subject','author_name' 
 					]
 				),
 				writer: new Ext.data.JsonWriter({
@@ -60,11 +52,18 @@ ui.www_article_comment.grid = Ext.extend(Ext.grid.EditorGridPanel, {
 					listful: true,
 					writeAllFields: false
 				}),
-				baseParams: {_nrecflag: 'null', start: 0, limit: this.pagerSize},
 				autoLoad: true,
 				remoteSort: true,
-				sortInfo: {field: 'created_datetime', direction: 'DESC'}
+				sortInfo: {field: 'order', direction: 'ASC'}
 			}),
+		});
+		Ext.apply(this, {
+			clmnTitle: 'Наименование',
+			clmnImage: 'превью если есть',
+			clmnFt: 'Тип',
+			pagerSize: 50,
+			pagerEmptyMsg: 'Нет записей',
+			pagerDisplayMsg: 'Записи с {0} по {1}. Всего: {2}'
 		});
 		Ext.apply(this, {
 			loadMask: true,
@@ -74,14 +73,13 @@ ui.www_article_comment.grid = Ext.extend(Ext.grid.EditorGridPanel, {
 			selModel: new Ext.grid.RowSelectionModel({singleSelect: true}),
 			colModel: new Ext.grid.ColumnModel({
 				defaults: {
-					width: 120
-					//,sortable: true
+					sortable: true
 				},
 				columns: [
-					{header: 'Дата', dataIndex: 'created_datetime', xtype: 'datecolumn', format: 'd M Y H:i', align: 'center'},
-					//{header: 'Опубликоано', dataIndex: 'public', width: 50, renderer: function(v){return (v > 0) ? '<img src="/ico/ok.png" border="0" />' : ''}, align: 'center'},
-					{header: 'Пользователь', dataIndex: 'name'},
-					{header: 'Статья', dataIndex: 'title', width: 200, id: 'expand'}
+					{header: 'ID', dataIndex: 'id', hidden: true},
+					{header: 'Опубликовано',  dataIndex: 'pub_stat', width:120},
+					{header: 'Автор',  dataIndex: 'author_name'},
+					{header: 'Тема',  dataIndex: 'subject', id: 'expand'}
 				]
 			})
 		});

@@ -39,6 +39,7 @@ class di_www_article_indexer extends data_interface
 		'published' => array('type' => 'integer'),
 		'uri' => array('type' => 'string'),
 		'categories' => array('type' => 'string'),
+		'comments' => array('type' => 'string'),
 		'tags' => array('type' => 'string'),
 		'images' => array('type' => 'string'),
 		'unique_visitors' => array('type' => 'integer'),
@@ -57,11 +58,17 @@ class di_www_article_indexer extends data_interface
 		parent::__construct(__CLASS__);
 	}
 
-	public function search_by_uri($uri, $columns = null)
+	public function search_by_uri($uri, $columns = null,$args = array())
 	{
 		$this->_flush();
-		$this->push_args(array('_suri' => $uri));
+		$args_to['_suri'] = $uri;
+		if($args['post_type'] >0)
+		{
+			$args_to['_spost_type'] = $args['post_type'];
+		}
+		$this->push_args($args_to);
 		$this->what = $columns;
+
 		$this->_get();
 		$this->pop_args();
 		return (array)$this->get_results(0);
@@ -266,6 +273,27 @@ class di_www_article_indexer extends data_interface
 		$this->pop_args();
 	}
 
+	protected function update_comments($id)
+	{
+		// Собираем изображения
+		$di = data_interface::get_instance('www_article_comment');
+		$di->_flush();
+		$di->push_args(array('_sitem_id' => $id));
+		$di->_get();
+		$data1 = $di->get_results();
+
+		$data = array('comments' => $this->json_enc($di->get_results()));
+		$di->pop_args();
+
+		// Обновляем данные
+		$this->_flush();
+		$this->push_args($data);
+		$this->set_args(array('_sitem_id' => $id), true);
+		$this->insert_on_empty = true;
+		$this->_set();
+		$this->pop_args();
+	}
+
 	/**
 	*	Обработчик события "Изменения  компании"
 	*
@@ -282,6 +310,7 @@ class di_www_article_indexer extends data_interface
 			$this->update_images($ids);
 			$this->update_categories($ids);
 			$this->update_tags($ids);
+			$this->update_comments($ids);
 		}
 		else if (is_array($ids))
 		{
@@ -291,6 +320,7 @@ class di_www_article_indexer extends data_interface
 				$this->update_images($id);
 				$this->update_categories($id);
 				$this->update_tags($id);
+				$this->update_comments($ids);
 			}
 		}
 		else
@@ -351,19 +381,26 @@ class di_www_article_indexer extends data_interface
 		
 		$this->removeable_id = $id;
 	}
+	public function article_comment_set($eObj, $ids, $args)
+	{
+		if (($id = (int)$args['item_id']) == 0 && !empty($args['_sitem_id']))
+			$id = (int)$args['_sitem_id'];
 
-	/**
-	*	Обработчик события "Удаление файлов стойматериалов"
-	*
-	* @access	public
-	* @param	object		$eObj	DI y_comp_settlement_files
-	* @param	array|integer	$ids	ID удалённых записей
-	* @param	array		$args	Массив ARGS который был актуален события
-	*/
-	public function article_files_unset($eObj, $ids, $args)
+		$this->update_comments($id);
+	}
+
+	public function article_comment_prepare_unset($eObj, $args)
+	{
+		if (($id = (int)$args['item_id']) == 0 && !empty($args['_sitem_id']))
+			$id = (int)$args['_sitem_id'];
+		
+		$this->removeable_id = $id;
+	}
+
+	public function article_comment_unset($eObj, $ids, $args)
 	{
 		if (!empty($this->removeable_id))
-			$this->update_images($this->removeable_id);
+			$this->update_comments($this->removeable_id);
 	}
 
 	/**
@@ -459,6 +496,23 @@ class di_www_article_indexer extends data_interface
 			$this->update_tags($this->removeable_id);
 		}
 	}
+	//9*  custom cyrillic fix. for json_encode
+	public function json_enc($arr)
+	{
+		$result = preg_replace_callback(
+			'/\\\u([0-9a-fA-F]{4})/', 
+			create_function('$_m', 'return mb_convert_encoding("&#" . intval($_m[1], 16) . ";", "UTF-8", "HTML-ENTITIES");'),
+                        str_replace('\n','',str_replace('\t','',str_replace('\r','',str_replace('"','\"',json_encode($arr)))))
+		);
+		/* 9* старый вариант не учитыввал замены переходов строк  и табов  на \n\t
+		$result = preg_replace_callback(
+			'/\\\u([0-9a-fA-F]{4})/', 
+			create_function('$_m', 'return mb_convert_encoding("&#" . intval($_m[1], 16) . ";", "UTF-8", "HTML-ENTITIES");'),
+			json_encode($arr)
+		);
+		*/
+		return $result;
+	}
 
 	public function _listeners()
 	{
@@ -474,6 +528,10 @@ class di_www_article_indexer extends data_interface
 			array('di' => 'www_article_tags', 'event' => 'onSet', 'handler' => 'article_tag_set'),
 			array('di' => 'www_article_tags', 'event' => 'onBeforeUnset', 'handler' => 'article_tag_prepare_unset'),
 			array('di' => 'www_article_tags', 'event' => 'onUnset', 'handler' => 'article_tag_unset'),
+			array('di' => 'www_article_comment', 'event' => 'onSet', 'handler' => 'article_comment_set'),
+			array('di' => 'www_article_comment', 'event' => 'onBeforeUnset', 'handler' => 'article_comment_prepare_unset'),
+			array('di' => 'www_article_comment', 'event' => 'onUnset', 'handler' => 'article_comment_unset'),
+
 		);
 	}
 }
