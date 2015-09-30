@@ -1,6 +1,6 @@
 ui.www_article.form = Ext.extend(Ext.form.FormPanel, {
 	formWidth: 900,
-	formHeight: 600,
+	formHeight: 500,
 
 	loadText: 'Загрузка данных формы',
 	lblTitle: 'Заголовок',
@@ -107,7 +107,7 @@ ui.www_article.form = Ext.extend(Ext.form.FormPanel, {
 					items: [
 						{name: '_sid', xtype: 'hidden'},
 						{fieldLabel: this.lblId, name: 'id', xtype: 'displayfield'},
-						{fieldLabel: this.lblTitle, name: 'title', maxLength: 255, maxLengthText: 'Не больше 255 символов'},
+						{fieldLabel: this.lblTitle, name: 'title', maxLength: 255, maxLengthText: 'Не больше 255 символов',allowBlank: false},
 						{fieldLabel: this.lblPostType, hiddenName: 'post_type', xtype: 'combo', allowBlank: false,
 							valueField: 'id', displayField: 'title', value: '1', emptyText: '', 
 							store: new Ext.data.JsonStore({url: 'di/www_article_post_types/type_list.json', root: 'records', fields: ['id', 'title'], autoLoad: true,
@@ -128,10 +128,15 @@ ui.www_article.form = Ext.extend(Ext.form.FormPanel, {
 							store: new Ext.data.SimpleStore({ fields: ['value', 'title'], data: [[1, 'Да'], [0, 'Нет']] }),
 							valueField: 'value', displayField: 'title', mode: 'local', triggerAction: 'all', selectOnFocus: true, editable: false
 						},
-						{fieldLabel: this.lblRlsDate, name: 'release_date', width: 100, format: 'Y-m-d H:i:s', allowBlank: false, xtype: 'datefield'},
+						{fieldLabel: this.lblRlsDate, name: 'release_date', width: 100, format: 'Y-m-d H:i:s', allowBlank: true, xtype: 'datefield'},
 						{fieldLabel: this.lblSource, name: 'source', maxLength: 64, maxLengthText: 'Не больше 64 символов'},
 						{fieldLabel: this.lblAuthor, name: 'author', maxLength: 255, maxLengthText: 'Не больше 255 символов'},
-						{fieldLabel: this.lblURI, name: 'uri', maxLength: 255, maxLengthText: 'Не больше 255 символов',allowBlank:false},
+						{fieldLabel: this.lblURI, name: 'uri', maxLength: 255, maxLengthText: 'Не больше 255 символов'},
+						{hideLabel: true, name: 'brief', xtype: 'ckeditor', CKConfig: {
+							height: 60,
+							toolbar: 'Basic',
+							filebrowserImageBrowseUrl: 'ui/file_manager/browser.html'
+						}},
 						{fieldLabel: this.lblCategory, xtype: 'compositefield', items: [
 							{xtype: 'button', iconCls: 'add', text:'Добавить изображение из загруженных',listeners: {click: function(){this.fireEvent('insert_image')}, scope: this}},
 							{xtype: 'displayfield', name: 'some_image'}
@@ -187,7 +192,16 @@ ui.www_article.form = Ext.extend(Ext.form.FormPanel, {
 						var real_name  =  row.get('real_name');
 						var url = row.get('url');
 						var path = url + real_name;
-						CKEDITOR.instances[ck_id].insertHtml('<img src="'+path+'"/>');
+						var is_image =  row.get('is_image');
+						var title =  row.get('title');
+						if(is_image == 1)
+						{
+							CKEDITOR.instances[ck_id].insertHtml('<img src="'+path+'"/>');
+						}
+						else
+						{
+							CKEDITOR.instances[ck_id].insertHtml('<a href="'+path+'">'+title+'</a>');
+						}
 						w.destroy();
 					},
 					scope: this
@@ -284,8 +298,8 @@ ui.www_article.form = Ext.extend(Ext.form.FormPanel, {
 		var app = new App({waitMsg: 'Загрузка формы'});
 		app.on({
 			apploaded: function(){
-				var f = new ui.www_article_comment.main_grid();
-				f.setParams({'_sarticle_id':vals._sid});
+				var f = new ui.www_article_comment.main();
+				f.setParams({'_sitem_id':vals._sid});
 				var w = new Ext.Window({iconCls: b.iconCls, title: b.text, maximizable: true, modal: true, layout: 'fit', width: 500, height: 400, items: f});
 				f.on({
 					cancelled: function(){w.destroy()},
@@ -296,7 +310,7 @@ ui.www_article.form = Ext.extend(Ext.form.FormPanel, {
 			apperror: showError,
 			scope: this
 		});
-		app.Load('www_article_comment', 'main_grid');
+		app.Load('www_article_comment', 'main');
 	},
 
 	/**

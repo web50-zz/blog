@@ -1,0 +1,16 @@
+<div class="trunc_menu">
+		  <a href="/" title="Главная">Главная</a> 
+{__(apply($.)__}
+	{__(if(@position < @last)__}
+		{__(if($id >1)__}
+			{__(if(@position != 3)__}
+			  &nbsp;&gt;&nbsp;  <a href="{__uri__}" title="{__title__}">{__title__} </a> 
+			{__if)__}
+		 {__if)__}
+	{__else__}
+		{__(if($id == '')__}
+			&nbsp;&gt;&nbsp;  <a href="#" class="current">{__title__}</a>
+		 {__if)__}
+	{__if)__}
+{__apply)__}
+</div>

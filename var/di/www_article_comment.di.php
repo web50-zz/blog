@@ -31,9 +31,12 @@ class di_www_article_comment extends data_interface
 		'id' => array('type' => 'integer', 'serial' => TRUE, 'readonly' => TRUE),
 		'created_datetime' => array('type' => 'datetime'),
 		'published' => array('type' => 'integer'),
-		'article_id' => array('type' => 'integer'),
+		'item_id' => array('type' => 'integer'),
 		'name' => array('type' => 'string'),
+		'author_name' => array('type' => 'string'),
 		'comment' => array('type' => 'string'),
+		'subject' => array('type' => 'string'),
+		'email' => array('type' => 'string'),
 	);
 	
 	public function __construct ()
@@ -63,7 +66,7 @@ class di_www_article_comment extends data_interface
 	protected function sys_list()
 	{
 		$this->_flush(true);
-		$art = $this->join_with_di('www_article', array('article_id' => 'id'), array('title' => 'title'));
+		$art = $this->join_with_di('www_article', array('item_id' => 'id'), array('title' => 'title'));
 		if (!empty($this->args['query']) && !empty($this->args['field']))
 		{
 			$this->args["_s{$this->args['field']}"] = "%{$this->args['query']}%";
@@ -86,9 +89,13 @@ class di_www_article_comment extends data_interface
 			'id',
 			'created_datetime',
 			'published',
-			'article_id',
+			'item_id',
 			array('di' => $art, 'name' => 'title'),
-			'name'
+			"IF(`".$this->get_alias()."`.published ='1','Опубликовано','Не опубликовано') as pub_stat",
+			'name',
+			'subject',
+			'author_name',
+
 		));
 	}
 	
@@ -106,11 +113,20 @@ class di_www_article_comment extends data_interface
 	*	Сохранить данные и вернуть JSON-пакет для ExtJS
 	* @access protected
 	*/
-	protected function sys_set()
+	public function sys_set($silent = false)
 	{
 		$this->_flush();
+		if(!$this->args['_sid'])
+		{
+			$this->args['created_datetime'] = date('Y-m-d H:i:s');
+		}
 		$this->insert_on_empty = true;
-		$this->extjs_set_json();
+		$res =	$this->extjs_set_json(false,false);
+		if($silent == true)
+		{
+			return $res;
+		}
+		response::send($res,'json');
 	}
 
 	/**
@@ -151,7 +167,7 @@ class di_www_article_comment extends data_interface
 		if (!is_array($ids) && $ids > 0)
 		{
 			$this->set_args(array(
-				'_sarticle_id' => $ids,
+				'_sitem_id' => $ids,
 			));
 			$this->_flush();
 			$this->_unset();
@@ -161,7 +177,7 @@ class di_www_article_comment extends data_interface
 			foreach ($ids as $id)
 			{
 				$this->set_args(array(
-					'_sarticle_id' => $id,
+					'_sitem_id' => $id,
 				));
 				$this->_flush();
 				$this->insert_on_empty = true;

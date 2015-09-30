@@ -1,4 +1,5 @@
 <div class="waf_default item">
+	{__set(#comments = json_decode($comments))__}
 	{__(if(/hide_title == 0)__}
 	<div class="main_title">{__title__}</div>
 	{__if)__}
@@ -7,3 +8,25 @@
 	{__$content__}
 	</div>
 </div>
+{__(if)count(#comments != 0)__}
+<ul class="comments">
+		{__(apply(#comments)__}
+		<li>
+			<div class="comment">
+				<div class="c-image">
+				</div>
+				<div class="comment-text">
+					<h4 class="comment-name uppercase oswald">
+						{__author_name__}	
+					</h4>
+					<span class="comment-date">
+						{__php::date('d.m.Y',strtotime($created_datetime))__}
+					</span>
+					<p>{__comment__}</p>
+				</div>
+			</div>
+		</li>
+		{__apply)__}
+			</ul>
+{__if)__}
+

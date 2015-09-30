@@ -110,9 +110,10 @@ class di_www_article_type extends data_interface
 		$silent = $this->get_args('silent',false);
 		try{
 			$this->check_input();
-			$this->check_uniq_uri($this->args['name']);
-			$di = data_interface::get_instance('www_article');
-			$di->check_uniq_uri($this->args['name']);
+//			$this->check_uniq_uri($this->args['name']);
+//			$di = data_interface::get_instance('www_article');
+//			$di->check_uniq_uri($this->args['name']);
+			$this->args['name'] = $this->prepare_uri();
 			if ($this->args['_sid'] > 0)
 			{
 				$uri = $this->get_args('uri');
@@ -501,7 +502,7 @@ class di_www_article_type extends data_interface
 		$args = $this->args;
 		if(!preg_match('/^[a-zA-Z1-90\-_]+$/',$args['name']))
 		{
-			throw new Exception('Имя может содержать только латинские буквы, цифры  и символы _ -. Пробелы не допустимы');
+//			throw new Exception('Имя может содержать только латинские буквы, цифры  и символы _ -. Пробелы не допустимы');
 		}
 	}
 
@@ -579,7 +580,6 @@ class di_www_article_type extends data_interface
 			array('di'=>$d2,'name'=>'name'),
 			array('di'=>$d2,'name'=>'title'),
 		);
-		$this->connector->debug = true;
 		$this->data =  $this->extjs_grid_json($flds,false);
 		$this->get_childs(0);
 		$this->correct_links();
@@ -676,6 +676,37 @@ class di_www_article_type extends data_interface
 				'count(*)'=>'cnt',
 				);
 		return $this->extjs_grid_json($what,false);
+	}
+
+	protected function prepare_uri()
+	{
+		$config = array();
+		$name = $this->get_args('uri');
+		$title = $this->get_args('title');
+		$id = $this->get_args('_sid');
+		$di = data_interface::get_instance('www_url_utils');
+		$config = array(
+			'www_article'=>array(
+					'field'=>'uri',
+					'id'=>$id
+				),
+			'www_article_type'=>array(
+					'field'=>'name'
+				),
+			);
+		if($name == '')
+		{
+			$name = $title;
+		}
+
+		try{
+			$uri = $di->prepare_uri($config,$name);
+		}
+		catch(exception $e)
+		{
+			dbg::write($e->getMessage());
+		}
+		return $uri;
 	}
 
 }

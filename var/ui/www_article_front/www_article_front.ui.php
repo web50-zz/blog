@@ -31,8 +31,15 @@ class ui_www_article_front extends user_interface
 		{
 			return $this->list_by_tag();
 		}
-		$di = data_interface::get_instance('www_article_url_indexer');
-		$res = $di->search_by_uri('/'.SRCH_URI);
+		if(!$this->location)
+		{
+			$di = data_interface::get_instance('www_article_url_indexer');
+			$res = $di->search_by_uri('/'.SRCH_URI);
+		}
+		else
+		{
+			$res = $this->location;
+		}
 		if($res['item_id']>0)
 		{
 			return $this->get_item($res['item_id']);
@@ -42,7 +49,23 @@ class ui_www_article_front extends user_interface
 			$this->detected_category = $res['category_id'];
 			return $this->get_post_list($res['category_id']);
 		}
-		return 'Not found';
+		if($res['id'] == 0 && SRCH_URI == '')
+		{
+			$possible_records =  $this->get_post_list();
+			if($possible_records != false)
+			{
+				return $possible_records;
+			}
+		}
+		return 'Ничего не найдено';
+	}
+
+	public function pub_locator()
+	{
+		$di = data_interface::get_instance('www_article_url_indexer');
+		$args = $this->get_args();
+		$res = $di->search_by_uri('/'.SRCH_URI,false,$args);
+		$this->location = $res;
 	}
 
 	//9*  вывод списка постов  по входному   тэгу
@@ -53,7 +76,7 @@ class ui_www_article_front extends user_interface
 		$page = request::get('page', 1);
 		$limit = $this->get_args('limit',5);
 		$post_type = $this->get_args('post_type',1);
-		$template = $this->get_args('template','list.html');
+		$template = $this->get_args('list_template','list.html');
 		$di =  data_interface::get_instance('www_article_indexer');
 		$this->args['srch'] = array(
 			'tag'=>$tag,
@@ -78,22 +101,33 @@ class ui_www_article_front extends user_interface
 		$di =  data_interface::get_instance('www_article_indexer');
 		$limit = $this->get_args('limit',5);
 		$post_type = $this->get_args('post_type',1);
-		$post_tmpl = $this->get_args('tmpl','list.html');
+		$post_tmpl = $this->get_args('list_template','list.html');
+		$enable_pager = $this->get_args('enable_pager',false);
 		$page = request::get('page', 1);
 		$this->args['srch'] = array(
-			'category_id'=>$id,
 			'sort'=>'release_date',
 			'dir'=>'DESC',
 			'start' => ($page - 1) * $limit,
 			'post_type'=>$post_type,
 			'limit'=>$limit,
 		);
+		if($id>0)
+		{
+			$this->args['srch']['category_id'] = $id;
+		}
 		$this->prepare_search();
 		$data = $di->get_list_by_srch($this->args['srch']);
-		$pager = user_interface::get_instance('pager');
-		$st=user_interface::get_instance('structure');
-		$st->collect_resources($pager,'pager');
-		$data['pager'] =$pager->get_pager(array('page' => $page, 'total' => $data['total'], 'limit' => $limit, 'prefix' => $_SERVER['QUERY_STRING']));
+		if(count($data['records']) == 0)
+		{
+			$enable_pager = false;
+		}
+		if($enable_pager == true)
+		{
+			$pager = user_interface::get_instance('pager');
+			$st=user_interface::get_instance('structure');
+			$st->collect_resources($pager,'pager');
+			$data['pager'] =$pager->get_pager(array('page' => $page, 'total' => $data['total'], 'limit' => $limit, 'prefix' => $_SERVER['QUERY_STRING']));
+		}
 		return $this->parse_tmpl($post_tmpl,$data);
 
 	}
@@ -129,14 +163,39 @@ class ui_www_article_front extends user_interface
 			$st->collect_resources($pager,'pager');
 			$data['pager'] =$pager->get_pager(array('page' => $page, 'total' => $data['total'], 'limit' => $limit, 'prefix' => $_SERVER['QUERY_STRING']));
 		}
+		$data['args'] = $this->args;
+		$data['PAGE_URI'] = PAGE_URI;
+		$data['SRHC_URI'] = SRCH_URI;
+		return $this->parse_tmpl($template,$data);
+	}
+
+	//9* 01052014 получаем публикацию по ID
+	public function pub_get_item()
+	{
+		$template = $this->get_args('template','item.html');
+		$args = $this->get_args();
+		$di =  data_interface::get_instance('www_article_indexer');
+		$id = $this->get_args('_sid',0);
+		$data = $di->get_record($id);
+		$data->args = $args;
 		return $this->parse_tmpl($template,$data);
 	}
 
 	public function get_item($id)
 	{
-		$template = $this->get_args('template','item.html');
+		$template = $this->get_args('post_template','item.html');
 		$di =  data_interface::get_instance('www_article_indexer');
 		$data = $di->get_record($id);
+		if($this->args['prev_next_post'])
+		{
+			$this->set_args(array('current'=>$id),true);
+			$prev_next = $this->pub_get_prev_next();
+			$data->prev_uri = $prev_next[0];
+			$data->next_uri = $prev_next[1];
+		}
+		$st = user_interface::get_instance('structure');
+		$st->add_title($data->title);
+		$st->add_description(strip_tags($data->brief));
 		return $this->parse_tmpl($template,$data);
 	}
 
@@ -168,6 +227,68 @@ class ui_www_article_front extends user_interface
 			$this->args['srch']['s'] = $string;
 		}
 	}
-		
+
+	public function pub_get_prev_next()
+	{
+		$post_type = $this->get_args('post_type',1);
+		$current_post = $this->get_args('current','0');
+		$di = data_interface::get_instance('www_article_indexer');
+		$di->push_args(array('_spost_type'=>$post_type));
+		$di->set_order('release_date','desc');
+		$res = $di->_get()->get_results();
+		$di->pop_args();
+		foreach($res as $key=>$value)
+		{
+			if($value->item_id == $current_post)
+			{
+				$prev_o = $res[$key+1];
+				$next_o = $res[$key-1];
+				if($prev_o)
+				{
+					$prev = $prev_o->uri;
+				}
+				if($next_o)
+				{
+					$next = $next_o->uri;
+				}
+
+			}
+		}
+		return array($prev,$next);
+	}
+
+	public function pub_comment()
+	{
+		$di = data_interface::get_instance('www_article_comment');
+		$di->_flush();
+		$di->set_args(request::get(array()));
+		$req = request::get();
+		$headers = getallheaders();
+		if($headers['X-Requested-With'] == 'XMLHttpRequest')
+		{
+			if($req['item_id'] >0 && $req['email'] != '' && $req['author_name'] != '')
+			{
+				$di->sys_set(true);
+			}
+			response::send('Спасибо за ваше обращение.','text');
+		}
+		return false;
+	}
+	public function pub_trunc()
+	{
+		$st = data_interface::get_instance('structure');
+		$data = $st->get_trunc_menu();
+		if($this->location['item_id']>0)
+		{
+			$di = data_interface::get_instance('www_article_indexer');
+			$di->_flush();
+			$di->push_args(array(
+				'_sitem_id'=>$this->location['item_id'],
+			));
+			$res = $di->_get()->get_results(0);
+			$data[] = array('title'=>$res->title,'name'=>$res->uri,'uri'=>'/'.$res->uri.'/');
+		}
+		return $this->parse_tmpl('trunc.html',$data);
+	}
 }
 ?>
