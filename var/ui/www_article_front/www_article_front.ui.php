@@ -103,10 +103,12 @@ class ui_www_article_front extends user_interface
 		$post_type = $this->get_args('post_type',1);
 		$post_tmpl = $this->get_args('list_template','list.html');
 		$enable_pager = $this->get_args('enable_pager',false);
+		$dir = $this->get_args('dir','DESC');
+		$sort = $this->get_args('sort','release_date');
 		$page = request::get('page', 1);
 		$this->args['srch'] = array(
-			'sort'=>'release_date',
-			'dir'=>'DESC',
+			'sort'=>$sort,
+			'dir'=>$dir,
 			'start' => ($page - 1) * $limit,
 			'post_type'=>$post_type,
 			'limit'=>$limit,
