@@ -46,6 +46,7 @@ class di_www_article_indexer extends data_interface
 		'total_visitors' => array('type' => 'integer'),
 		'like' => array('type' => 'integer'),
 		'dislike' => array('type' => 'integer'),
+		'order' => array('type' => 'integer'),
 	);
 
 	/**
@@ -168,6 +169,7 @@ class di_www_article_indexer extends data_interface
 			'published',
 			'source',
 			'author',
+			'order',
 			'unique_visitors',
 			'total_visitors',
 			'like',
