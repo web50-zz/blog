@@ -138,7 +138,7 @@ class ui_www_article_front extends user_interface
 	{
 		$di =  data_interface::get_instance('www_article_indexer');
 		$limit = $this->get_args('limit',5);
-		$post_type = $this->get_args('post_type',1);
+		$post_type = $this->get_args('post_type');
 		$template = $this->get_args('template','list.html');
 		$page = request::get('page', 1);
 		$category_id = $this->get_args('category_id','');
@@ -152,9 +152,17 @@ class ui_www_article_front extends user_interface
 			'post_type'=>$post_type,
 			'limit'=>$limit,
 		);
+		if($post_type >0)
+		{
+			$this->args['srch']['post_type'] = $post_type;
+		}
 		if($category_id>0)
 		{
 			$this->args['srch']['category_id'] = $category_id;
+			$di2 = data_interface::get_instance('www_article_type');
+			$di2->_flush();
+			$di2->set_args(array('_sid'=>$category_id));
+			$cdata = $di2->_get()->get_results(0);
 		}
 		$this->prepare_search();
 		$data = $di->get_list_by_srch($this->args['srch']);
@@ -168,6 +176,10 @@ class ui_www_article_front extends user_interface
 		$data['args'] = $this->args;
 		$data['PAGE_URI'] = PAGE_URI;
 		$data['SRHC_URI'] = SRCH_URI;
+		if($category_id > 0)
+		{
+			$data['category'] = $cdata;
+		}
 		return $this->parse_tmpl($template,$data);
 	}
 
