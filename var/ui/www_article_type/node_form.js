@@ -1,6 +1,6 @@
 ui.www_article_type.node_form = Ext.extend(Ext.form.FormPanel, {
-	formWidth: 400,
-	formHeight: 320,
+	formWidth: 500,
+	formHeight: 520,
 
 	fldTitle: 'Наименование',
 	fldName: 'Лат. Имя стр.',
@@ -96,6 +96,11 @@ ui.www_article_type.node_form = Ext.extend(Ext.form.FormPanel, {
 							store: new Ext.data.SimpleStore({ fields: ['value', 'title'], data: [[1, 'Да'], [0, 'Нет']] }),
 							valueField: 'value', displayField: 'title', mode: 'local', triggerAction: 'all', selectOnFocus: true, editable: false
 						},
+						{hideLabel: true, name: 'brief', xtype: 'ckeditor', CKConfig: {
+							height: 60,
+							toolbar: 'Basic',
+							filebrowserImageBrowseUrl: 'ui/file_manager/browser.html'
+						}},
 						{fieldLabel: this.fldName, name: 'name'},
 						{fieldLabel: this.fldURI, name: 'uri', disabled: true}
 					]}

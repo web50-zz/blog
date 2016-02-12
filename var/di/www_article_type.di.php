@@ -32,6 +32,7 @@ class di_www_article_type extends data_interface
 			'title' => array('type' => 'string'),
 			'name' => array('type' => 'string'),
 			'uri' => array('type' => 'string'),
+			'brief' => array('type' => 'string'),
 			'left' => array('type' => 'integer', 'protected' => 1),
 			'right' => array('type' => 'integer', 'protected' => 1),
 			'level' => array('type' => 'integer', 'readonly' => 1),

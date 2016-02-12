@@ -4,6 +4,7 @@ CREATE TABLE `www_article_type` (
   `title` varchar(255) NOT NULL DEFAULT '',
   `name` varchar(16) NOT NULL DEFAULT '',
   `uri` varchar(255) NOT NULL DEFAULT '',
+  `brief` text NOT NULL DEFAULT '',
   `left` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `right` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `level` mediumint(8) unsigned NOT NULL DEFAULT '0',
