@@ -1,0 +1,19 @@
+    <section class="well9">
+      <div class="container">
+        <h3>{__/parent/title__}</h3>
+        <div class="row">
+	{__(apply(/records)__}
+          <div class="grid_6 wow {__(if(@position % 2)__}fadeInLeft {__else__} fadeInRight {__if)__} {__(if(@position <= 2)__}offs5{__if)__}">
+            <h4>{__title__}</h4>
+		{__brief__}
+            <ul class="marked-list">
+		{__(apply($articles)__}
+		  <li><a href="#">{__title__}</a></li>
+	      {__apply)__}
+            </ul>
+          </div>
+	  {__apply)__}
+        </div>
+      </div>
+    </section>
+

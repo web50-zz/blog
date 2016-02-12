@@ -657,6 +657,20 @@ class di_www_article_type extends data_interface
 		return $ids;
 	}
 
+	public function get_all_descendants($id)
+	{
+		$ns = new nested_sets($this);
+		$childs = $ns->get_childs($id,10000);
+		return $childs;
+	}
+	public function get_node_info($id)
+	{
+		$this->_flush();
+		$this->set_args(array('_sid'=>$id));
+		$res = $this->_get()->get_results(0);
+		return $res;
+	}
+
 	public function get_simple_list()
 	{
 		$this->_flush();

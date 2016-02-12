@@ -304,5 +304,45 @@ class ui_www_article_front extends user_interface
 		}
 		return $this->parse_tmpl('trunc.html',$data);
 	}
+	/* 9* 12022016 Выводит список  публикаций входящих в подкатеггории указанной категории  сгруппированный по подкатегориям */
+	public function pub_sub_list_by_category()
+	{
+		$template = $this->get_args('template','sub_list_by_category.html');
+		$data = array();
+		$parent = $this->get_args('parent','1');
+		$di = data_interface::get_instance('www_article_type');
+		$cat =  $di->get_all_descendants($parent);
+		$parent = $di->get_node_info($parent);
+		foreach($cat as $key=>$value)
+		{
+			$ids[] =  $value['id'];
+		}
+		$di = data_interface::get_instance('www_article_in_category');
+		$di->set_args(array('_scategory_id'=>$ids));
+		$d2 = $di->join_with_di('www_article_indexer',array('item_id'=>'item_id'),array('title'=>'title','uri'=>'uri'));
+		$flds = array(
+			'category_id',
+			array('di'=>$d2,'name'=>'title'),
+			array('di'=>$d2,'name'=>'uri'),
+		);
+		$res = $di->extjs_grid_json($flds,false);
+		foreach($res['records'] as $key=>$value)
+		{
+			foreach($cat as $key2=>$value2)
+			{
+				if(!array_key_exists('articles',$value2))
+				{
+					$cat[$key2]['articles'] = array();
+				}
+				if($value['category_id'] == $value2['id'])
+				{
+					$cat[$key2]['articles'][] = $value;
+				}
+			}
+		}
+		$data['records'] = $cat;
+		$data['parent'] = $parent;
+		return $this->parse_tmpl($template,$data);
+	}
 }
 ?>
