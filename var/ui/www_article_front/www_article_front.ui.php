@@ -25,6 +25,11 @@ class ui_www_article_front extends user_interface
 	{
 		if(SRCH_URI == '')
 		{
+			if($this->args['nolists'] == true)
+			{
+				header( 'Location: '.$this->args['redirect_404'].'', true, 301 );
+				return '';
+			}
 			return $this->get_post_list();
 		}
 		if(preg_match('/tag\//',SRCH_URI))
