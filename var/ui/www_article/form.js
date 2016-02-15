@@ -133,7 +133,7 @@ ui.www_article.form = Ext.extend(Ext.form.FormPanel, {
 						{fieldLabel: this.lblAuthor, name: 'author', maxLength: 255, maxLengthText: 'Не больше 255 символов'},
 						{fieldLabel: this.lblURI, name: 'uri', maxLength: 255, maxLengthText: 'Не больше 255 символов'},
 						{hideLabel: true, name: 'brief', xtype: 'ckeditor', CKConfig: {
-							height: 60,
+							height: 160,
 							toolbar: 'Basic',
 							filebrowserImageBrowseUrl: 'ui/file_manager/browser.html'
 						}},
