@@ -226,7 +226,18 @@ class ui_www_article_front extends user_interface
 		$data['current_category'] = $this->detected_category; //9* это работает только, если на странице ранее уже вызывался метод pub_content где детект происходит
 		return $this->parse_tmpl('categories.html',$data);
 	}
-
+		/* 9* 29022015 выводит подкатегории по заданнйо ноде */
+	public function pub_get_subcategories()
+	{
+		$template = $this->get_args('template','get_subcategories.html');
+		$parent = $this->get_args('parent','1');
+		$di =  data_interface::get_instance('www_article_type');
+		$res = $di -> get_all_descendants($parent);
+		$parent = $di->get_node_info($parent);
+		$data['parent'] = $parent;
+		$data['records'] =  $res;
+		return $this->parse_tmpl($template,$data);
+	}
 	// 9*  30072013 список тагов
 	public function pub_tags()
 	{
