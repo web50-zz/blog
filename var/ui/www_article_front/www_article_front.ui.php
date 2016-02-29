@@ -213,7 +213,7 @@ class ui_www_article_front extends user_interface
 			$data->next_uri = $prev_next[1];
 		}
 		$st = user_interface::get_instance('structure');
-		$st->add_title($data->title);
+		$st->add_title(strip_tags($data->title));
 		$st->add_description(strip_tags($data->brief));
 		return $this->parse_tmpl($template,$data);
 	}
