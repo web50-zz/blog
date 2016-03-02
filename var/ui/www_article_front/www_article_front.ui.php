@@ -105,7 +105,7 @@ class ui_www_article_front extends user_interface
 	{
 		$di =  data_interface::get_instance('www_article_indexer');
 		$limit = $this->get_args('limit',5);
-		$post_type = $this->get_args('post_type',1);
+		$post_type = $this->get_args('post_type',0);
 		$post_tmpl = $this->get_args('list_template','list.html');
 		$enable_pager = $this->get_args('enable_pager',false);
 		$dir = $this->get_args('dir','DESC');
@@ -115,9 +115,12 @@ class ui_www_article_front extends user_interface
 			'sort'=>$sort,
 			'dir'=>$dir,
 			'start' => ($page - 1) * $limit,
-			'post_type'=>$post_type,
 			'limit'=>$limit,
 		);
+		if($post_type>0)
+		{
+			$this->args['srch']['post_type'] = $post_type;
+		}
 		if($id>0)
 		{
 			$this->args['srch']['category_id'] = $id;
@@ -213,7 +216,7 @@ class ui_www_article_front extends user_interface
 			$data->next_uri = $prev_next[1];
 		}
 		$st = user_interface::get_instance('structure');
-		$st->add_title(strip_tags($data->title));
+		$st->add_title($data->title);
 		$st->add_description(strip_tags($data->brief));
 		return $this->parse_tmpl($template,$data);
 	}
@@ -358,6 +361,7 @@ class ui_www_article_front extends user_interface
 		}
 		$data['records'] = $cat;
 		$data['parent'] = $parent;
+		$data['args'] = $this->get_args();
 		return $this->parse_tmpl($template,$data);
 	}
 }
