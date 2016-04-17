@@ -205,6 +205,10 @@ class ui_www_article_front extends user_interface
 		$id = $this->get_args('_sid',0);
 		$data = $di->get_record($id);
 		$data->args = $args;
+		if($template == 'empty')
+		{
+			return $data->content;
+		}
 		return $this->parse_tmpl($template,$data);
 	}
 
