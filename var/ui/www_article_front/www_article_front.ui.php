@@ -338,11 +338,12 @@ class ui_www_article_front extends user_interface
 		}
 		$di = data_interface::get_instance('www_article_in_category');
 		$di->set_args(array('_scategory_id'=>$ids));
-		$d2 = $di->join_with_di('www_article_indexer',array('item_id'=>'item_id'),array('title'=>'title','uri'=>'uri'));
+		$d2 = $di->join_with_di('www_article_indexer',array('item_id'=>'item_id'),array('title'=>'title','uri'=>'uri','published'=>'published'));
 		$flds = array(
 			'category_id',
 			array('di'=>$d2,'name'=>'title'),
 			array('di'=>$d2,'name'=>'uri'),
+			array('di'=>$d2,'name'=>'published'),
 		);
 		$res = $di->extjs_grid_json($flds,false);
 		foreach($res['records'] as $key=>$value)
