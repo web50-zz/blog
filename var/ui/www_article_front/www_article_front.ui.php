@@ -111,6 +111,7 @@ class ui_www_article_front extends user_interface
 		$dir = $this->get_args('dir','DESC');
 		$sort = $this->get_args('sort','release_date');
 		$page = request::get('page', 1);
+		$category_id = $this->get_args('category_id',0);
 		$this->args['srch'] = array(
 			'sort'=>$sort,
 			'dir'=>$dir,
@@ -125,6 +126,10 @@ class ui_www_article_front extends user_interface
 		{
 			$this->args['srch']['category_id'] = $id;
 		}
+		if($category_id > 0)
+		{
+			$this->args['srch']['category_id'] = $category_id;
+		}	
 		$this->prepare_search();
 		$data = $di->get_list_by_srch($this->args['srch']);
 		if(count($data['records']) == 0)
@@ -200,6 +205,10 @@ class ui_www_article_front extends user_interface
 		$id = $this->get_args('_sid',0);
 		$data = $di->get_record($id);
 		$data->args = $args;
+		if($template == 'empty')
+		{
+			return $data->content;
+		}
 		return $this->parse_tmpl($template,$data);
 	}
 

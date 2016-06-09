@@ -21,7 +21,7 @@
 
 LOCK TABLES `www_article_type` WRITE;
 /*!40000 ALTER TABLE `www_article_type` DISABLE KEYS */;
-INSERT INTO `www_article_type` VALUES (1,0,'Любой','home','/home/',1,10,1,0,0,0),(1523,0,'статьи','stati','/stati/',2,3,2,1,0,0),(1524,0,'выездные регистрации','vyezdnye-registr','/vyezdnye-registracii/',4,5,2,1,0,0),(1525,0,'наши оформления','nashi-oformleniy','/nashi-oformleniya/',6,7,2,1,0,0),(1526,0,'мастер-класс','master-klass','/master-klass/',8,9,2,1,0,0);
+INSERT INTO `www_article_type` VALUES (1,0,'Любой','home','/home/','',1,10,1,0,0,0),(1523,0,'статьи','stati','/stati/','',2,3,2,1,0,0),(1524,0,'выездные регистрации','vyezdnye-registr','/vyezdnye-registracii/','',4,5,2,1,0,0),(1525,0,'наши оформления','nashi-oformleniy','/nashi-oformleniya/','',6,7,2,1,0,0),(1526,0,'мастер-класс','master-klass','/master-klass/','',8,9,2,1,0,0);
 /*!40000 ALTER TABLE `www_article_type` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
