@@ -93,7 +93,7 @@ class di_www_article_indexer extends data_interface
 			'dir' => $srch['dir'],
 			'start' => $srch['start'],
 			'limit' => $srch['limit'],
-			'_spublished' => 1,
+//			'_spublished' => 1,
 		));
 		$W = array();
 		$where = array();
