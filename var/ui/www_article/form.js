@@ -12,6 +12,8 @@ ui.www_article.form = Ext.extend(Ext.form.FormPanel, {
 	lblURI: 'URI',
 	lblPublished: 'Опубликовано',
 	lblPostType:'Тип публикации',
+	lblChngDate: 'Изменено',
+	lblPublishDate: 'Опубликовано',
 
 	lblId: "Id",
 	saveText: 'Сохранение...',
@@ -129,6 +131,8 @@ ui.www_article.form = Ext.extend(Ext.form.FormPanel, {
 							valueField: 'value', displayField: 'title', mode: 'local', triggerAction: 'all', selectOnFocus: true, editable: false
 						},
 						{fieldLabel: this.lblRlsDate, name: 'release_date', width: 100, format: 'Y-m-d H:i:s', allowBlank: true, xtype: 'datefield'},
+						{fieldLabel: this.lblChngDate, name: 'changed_date', width: 100, format: 'Y-m-d', allowBlank: true, xtype: 'datefield'},
+						{fieldLabel: this.lblPublishDate, name: 'published_date', width: 100, format: 'Y-m-d', allowBlank: true, xtype: 'datefield'},
 						{fieldLabel: this.lblSource, name: 'source', maxLength: 64, maxLengthText: 'Не больше 64 символов'},
 						{fieldLabel: this.lblAuthor, name: 'author', maxLength: 255, maxLengthText: 'Не больше 255 символов'},
 						{fieldLabel: this.lblURI, name: 'uri', maxLength: 255, maxLengthText: 'Не больше 255 символов'},

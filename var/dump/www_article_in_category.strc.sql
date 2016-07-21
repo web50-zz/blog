@@ -3,4 +3,4 @@ CREATE TABLE `www_article_in_category` (
   `category_id` int(10) DEFAULT NULL,
   `item_id` int(10) DEFAULT NULL,
   UNIQUE KEY `id` (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=166 DEFAULT CHARSET=utf8
+) ENGINE=MyISAM AUTO_INCREMENT=185 DEFAULT CHARSET=utf8

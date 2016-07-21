@@ -31,7 +31,13 @@ class di_www_article extends data_interface
 		'id' => array('type' => 'integer', 'serial' => 1),
 		'order' => array('type' => 'integer'),
 		'post_type' => array('type' => 'integer'),
+		'creator_uid' => array('type' => 'integer'),
+		'changer_uid' => array('type' => 'integer'),
 		'release_date' => array('type' => 'date'),
+		'changed_date' => array('type' => 'date'),
+		'published_date' => array('type' => 'date'),
+		'record_created_date' => array('type' => 'date'),
+		'record_changed_date' => array('type' => 'date'),
 		'title' => array('type' => 'string'),
 		'source' => array('type' => 'string'),
 		'author' => array('type' => 'string'),
@@ -101,6 +107,15 @@ class di_www_article extends data_interface
 			if (!($fid > 0))
 			{
 				$args['order'] = $this->get_new_order();
+				$args['changer_uid'] = UID;
+				$args['creator_uid'] = UID;
+				$args['record_created_date'] = date('Y-m-d H:i:s',time());
+				$args['record_changed_date'] = date('Y-m-d H:i:s',time());
+			}
+			else
+			{
+				$args['changer_uid'] = UID;
+				$args['record_changed_date'] = date('Y-m-d H:i:s',time());
 			}
 			$this->set_args($args);
 			$this->_flush();

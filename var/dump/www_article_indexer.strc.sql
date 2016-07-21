@@ -1,6 +1,12 @@
 CREATE TABLE `www_article_indexer` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `item_id` int(10) unsigned NOT NULL,
+  `creator_uid` int(11) DEFAULT NULL,
+  `changer_uid` int(11) DEFAULT NULL,
+  `record_created_date` datetime DEFAULT NULL,
+  `record_changed_date` datetime DEFAULT NULL,
+  `changed_date` date DEFAULT NULL,
+  `published_date` date DEFAULT NULL,
   `post_type` tinyint(3) unsigned NOT NULL,
   `title` varchar(255) NOT NULL,
   `uri` varchar(255) NOT NULL,
@@ -28,4 +34,4 @@ CREATE TABLE `www_article_indexer` (
   KEY `release_date` (`release_date`),
   FULLTEXT KEY `tags` (`tags`),
   FULLTEXT KEY `categories` (`categories`)
-) ENGINE=MyISAM AUTO_INCREMENT=99 DEFAULT CHARSET=utf8
+) ENGINE=MyISAM AUTO_INCREMENT=238 DEFAULT CHARSET=utf8

@@ -17,4 +17,4 @@ CREATE TABLE `www_article_files` (
   `item_id` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `order` (`order`)
-) ENGINE=MyISAM AUTO_INCREMENT=392 DEFAULT CHARSET=utf8
+) ENGINE=MyISAM AUTO_INCREMENT=395 DEFAULT CHARSET=utf8

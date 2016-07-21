@@ -6,4 +6,4 @@ CREATE TABLE `www_article_url_indexer` (
   `url` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `item_id` (`item_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=244 DEFAULT CHARSET=utf8
+) ENGINE=MyISAM AUTO_INCREMENT=404 DEFAULT CHARSET=utf8

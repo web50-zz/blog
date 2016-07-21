@@ -6,4 +6,4 @@ CREATE TABLE `www_article_post_types` (
   `not_available` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `order` (`order`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8

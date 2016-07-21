@@ -4,7 +4,7 @@ CREATE TABLE `www_article_type` (
   `title` varchar(255) NOT NULL DEFAULT '',
   `name` varchar(16) NOT NULL DEFAULT '',
   `uri` varchar(255) NOT NULL DEFAULT '',
-  `brief` text NOT NULL DEFAULT '',
+  `brief` text NOT NULL,
   `left` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `right` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `level` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -14,4 +14,4 @@ CREATE TABLE `www_article_type` (
   PRIMARY KEY (`id`),
   KEY `site_part_id` (`left`,`right`,`level`),
   KEY `uri` (`uri`)
-) ENGINE=MyISAM AUTO_INCREMENT=1527 DEFAULT CHARSET=utf8
+) ENGINE=MyISAM AUTO_INCREMENT=1529 DEFAULT CHARSET=utf8
