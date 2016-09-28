@@ -120,6 +120,11 @@ class di_www_article_indexer extends data_interface
 			$where[] = "MATCH (`content`) AGAINST ('\"".$srch['s']."\"' IN BOOLEAN MODE)";
 			$where[] = "MATCH (`title`) AGAINST ('\"".$srch['s']."\"' IN BOOLEAN MODE)";
 		}
+		if($srch['year'])
+		{
+			$where[] = "(release_date > '".$srch['year']."-01-01' AND release_date < '".($srch['year']+1)."-01-01')";
+
+		}
 		if (!empty($where))
 		{
 			$W[] = join(' OR ', $where);
