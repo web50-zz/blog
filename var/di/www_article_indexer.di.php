@@ -227,7 +227,7 @@ class di_www_article_indexer extends data_interface
 
 			);
 		$di->_get();
-		$data = array('images' => json_encode($di->get_results()));
+		$data = array('images' => $this->json_enc($di->get_results()));
 		$di->pop_args();
 
 		// Обновляем данные
@@ -254,7 +254,7 @@ class di_www_article_indexer extends data_interface
 		$di->_get();
 		$data1 = $di->get_results();
 
-		$data = array('categories' => json_encode($di->get_results()));
+		$data = array('categories' =>  $this->json_enc($di->get_results()));
 		$di->pop_args();
 
 		// Обновляем данные
@@ -281,7 +281,7 @@ class di_www_article_indexer extends data_interface
 		$di->_get();
 		$data1 = $di->get_results();
 
-		$data = array('tags' => json_encode($di->get_results()));
+		$data = array('tags' => $this->json_enc($di->get_results()));
 		$di->pop_args();
 
 		// Обновляем данные
