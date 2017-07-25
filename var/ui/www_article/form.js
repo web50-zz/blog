@@ -142,7 +142,7 @@ ui.www_article.form = Ext.extend(Ext.form.FormPanel, {
 							filebrowserImageBrowseUrl: 'ui/file_manager/browser.html'
 						}},
 						{fieldLabel: this.lblCategory, xtype: 'compositefield', items: [
-							{xtype: 'button', iconCls: 'add', text:'Добавить изображение из загруженных',listeners: {click: function(){this.fireEvent('insert_image')}, scope: this}},
+							{xtype: 'button', iconCls: 'add', text:'Добавить изображение/файл из загруженных',listeners: {click: function(){this.fireEvent('insert_image')}, scope: this}},
 							{xtype: 'displayfield', name: 'some_image'}
 						]},
 						{hideLabel: true, name: 'content', xtype: 'ckeditor', CKConfig: {
