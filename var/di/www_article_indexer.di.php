@@ -387,6 +387,13 @@ class di_www_article_indexer extends data_interface
 		$this->update_images($id);
 	}
 
+	public function article_files_unset($eObj, $ids, $args)
+	{
+
+		if (!empty($this->removeable_id))
+			$this->update_images($this->removeable_id);
+	}
+
 	/**
 	*	Обработчик события "Изменения  компании"
 	*
