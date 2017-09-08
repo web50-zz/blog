@@ -44,14 +44,19 @@ class di_www_article_url_indexer extends data_interface
 		parent::__construct(__CLASS__);
 	}
 
-	public function search_by_uri($uri, $columns = null)
+	public function search_by_uri($uri, $columns = null,$args = array())
 	{
 		$this->_flush();
-		$this->push_args(array('_surl' => $uri));
+		$args_to['_surl'] = $uri;
+		if($args['post_type'] >0)
+		{
+			$args_to['_spost_type'] = $args['post_type'];
+		}
+		$this->push_args($args_to);
 		$this->what = $columns;
-		$this->_get();
+		$res = $this->_get()->get_results();
 		$this->pop_args();
-		return (array)$this->get_results(0);
+		return (array)$res[0];
 	}
 
 	public function search_id_by_uri($uri)

@@ -23,6 +23,7 @@ class ui_www_article_front extends user_interface
 	*/
 	public function pub_content()
 	{
+		$args = $this->get_args();
 		if(SRCH_URI == '')
 		{
 			if($this->args['nolists'] == true)
@@ -36,10 +37,12 @@ class ui_www_article_front extends user_interface
 		{
 			return $this->list_by_tag();
 		}
-		if(!$this->location)
+		if(!$this->location && !$this->locator_done)
 		{
 			$di = data_interface::get_instance('www_article_url_indexer');
-			$res = $di->search_by_uri('/'.SRCH_URI);
+			$res = $di->search_by_uri('/'.SRCH_URI,false,$args);
+			$this->locator_done = true;
+			$this->location = $res;
 		}
 		else
 		{
@@ -62,7 +65,8 @@ class ui_www_article_front extends user_interface
 				return $possible_records;
 			}
 		}
-		return 'Ничего не найдено';
+		$st = user_interface::get_instance('structure');
+		return $st->do_404();
 	}
 
 	public function pub_locator()
@@ -70,6 +74,7 @@ class ui_www_article_front extends user_interface
 		$di = data_interface::get_instance('www_article_url_indexer');
 		$args = $this->get_args();
 		$res = $di->search_by_uri('/'.SRCH_URI,false,$args);
+		$this->locator_done = true;
 		$this->location = $res;
 	}
 
