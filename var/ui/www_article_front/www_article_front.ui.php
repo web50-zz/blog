@@ -117,6 +117,7 @@ class ui_www_article_front extends user_interface
 		$sort = $this->get_args('sort','release_date');
 		$page = request::get('page', 1);
 		$category_id = $this->get_args('category_id',0);
+		$list_body_class = $this->get_args('list_body_class','');
 		$this->args['srch'] = array(
 			'sort'=>$sort,
 			'dir'=>$dir,
@@ -149,6 +150,11 @@ class ui_www_article_front extends user_interface
 			$data['pager'] =$pager->get_pager(array('page' => $page, 'total' => $data['total'], 'limit' => $limit, 'prefix' => $_SERVER['QUERY_STRING']));
 		}
 		$data['args'] = $this->args;
+		if($list_body_class != '')
+		{
+			$st=user_interface::get_instance('structure');
+			$st->add_body_class($list_body_class);
+		}
 		return $this->parse_tmpl($post_tmpl,$data);
 
 	}
@@ -209,8 +215,16 @@ class ui_www_article_front extends user_interface
 		$args = $this->get_args();
 		$di =  data_interface::get_instance('www_article_indexer');
 		$id = $this->get_args('_sid',0);
+		$item_body_class = $this->get_args('item_body_class','');
 		$data = $di->get_record($id);
 		$data->args = $args;
+
+		if($item_body_class != '')
+		{
+			$st=user_interface::get_instance('structure');
+			$st->add_body_class($item_body_class);
+		}
+
 		if($template == 'empty')
 		{
 			return $data->content;
@@ -221,6 +235,7 @@ class ui_www_article_front extends user_interface
 	public function get_item($id)
 	{
 		$template = $this->get_args('post_template','item.html');
+		$item_body_class = $this->get_args('item_body_class','');
 		$di =  data_interface::get_instance('www_article_indexer');
 		$data = $di->get_record($id);
 		if($this->args['prev_next_post'])
@@ -233,6 +248,11 @@ class ui_www_article_front extends user_interface
 		$st = user_interface::get_instance('structure');
 		$st->add_title(strip_tags($data->title));
 		$st->add_description(strip_tags($data->brief));
+		if($item_body_class != '')
+		{
+			$st->add_body_class($item_body_class);
+		}
+
 		return $this->parse_tmpl($template,$data);
 	}
 
