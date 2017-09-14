@@ -24,7 +24,7 @@ class ui_www_article_front extends user_interface
 	public function pub_content()
 	{
 		$args = $this->get_args();
-		if(SRCH_URI == '')
+		if(SRCH_URI == ''||!defined('SRCH_URI'))
 		{
 			if($this->args['nolists'] == true)
 			{
@@ -37,16 +37,19 @@ class ui_www_article_front extends user_interface
 		{
 			return $this->list_by_tag();
 		}
-		if(!$this->location && !$this->locator_done)
+		if(defined('SRCH_URI'))
 		{
-			$di = data_interface::get_instance('www_article_url_indexer');
-			$res = $di->search_by_uri('/'.SRCH_URI,false,$args);
-			$this->locator_done = true;
-			$this->location = $res;
-		}
-		else
-		{
-			$res = $this->location;
+			if(!$this->location && !$this->locator_done && SRCH_URI != '')
+			{
+				$di = data_interface::get_instance('www_article_url_indexer');
+				$res = $di->search_by_uri('/'.SRCH_URI,false,$args);
+				$this->locator_done = true;
+				$this->location = $res;
+			}
+			else
+			{
+				$res = $this->location;
+			}
 		}
 		if($res['item_id']>0)
 		{
@@ -71,11 +74,17 @@ class ui_www_article_front extends user_interface
 
 	public function pub_locator()
 	{
-		$di = data_interface::get_instance('www_article_url_indexer');
-		$args = $this->get_args();
-		$res = $di->search_by_uri('/'.SRCH_URI,false,$args);
-		$this->locator_done = true;
-		$this->location = $res;
+		if(defined('SRCH_URI'))
+		{
+			if(SRCH_URI != '')
+			{
+				$di = data_interface::get_instance('www_article_url_indexer');
+				$args = $this->get_args();
+				$res = $di->search_by_uri('/'.SRCH_URI,false,$args);
+				$this->locator_done = true;
+				$this->location = $res;
+			}
+		}
 	}
 
 	//9*  вывод списка постов  по входному   тэгу
@@ -150,11 +159,12 @@ class ui_www_article_front extends user_interface
 			$data['pager'] =$pager->get_pager(array('page' => $page, 'total' => $data['total'], 'limit' => $limit, 'prefix' => $_SERVER['QUERY_STRING']));
 		}
 		$data['args'] = $this->args;
+		$st=user_interface::get_instance('structure');
 		if($list_body_class != '')
 		{
-			$st=user_interface::get_instance('structure');
 			$st->add_body_class($list_body_class);
 		}
+		$data['current_page'] = $st->get_page_info();
 		return $this->parse_tmpl($post_tmpl,$data);
 
 	}
