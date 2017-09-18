@@ -50,22 +50,14 @@ class ui_www_article_front extends user_interface
 			{
 				$res = $this->location;
 			}
-		}
-		if($res['item_id']>0)
-		{
-			return $this->get_item($res['item_id']);
-		}
-		if($res['item_id']==0 && $res['category_id'] >0)
-		{
-			$this->detected_category = $res['category_id'];
-			return $this->get_post_list($res['category_id']);
-		}
-		if($res['id'] == 0 && SRCH_URI == '')
-		{
-			$possible_records =  $this->get_post_list();
-			if($possible_records != false)
+			if($res['item_id']>0)
 			{
-				return $possible_records;
+			return $this->get_item($res['item_id']);
+			}
+			if($res['item_id']==0 && $res['category_id'] >0)
+			{
+				$this->detected_category = $res['category_id'];
+				return $this->get_post_list($res['category_id']);
 			}
 		}
 		$st = user_interface::get_instance('structure');
