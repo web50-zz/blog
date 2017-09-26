@@ -26,9 +26,12 @@ class ui_www_article_front extends user_interface
 		$args = $this->get_args();
 		if(SRCH_URI == '')
 		{
-			if($this->args['nolists'] == true)
+			if($this->args['nolists'] == true)//это надо чтобы отображались посты но на самой странице не было общего списка. 
 			{
-				header( 'Location: '.$this->args['redirect_404'].'', true, 301 );
+				if($this->args['redirect_404']) // это если и самой страницы со списком не надо а кудато посылать
+				{
+					header( 'Location: '.$this->args['redirect_404'].'', true, 301 );
+				}
 				return '';
 			}
 			return $this->get_post_list();
@@ -50,6 +53,11 @@ class ui_www_article_front extends user_interface
 		}
 		if($res['item_id']>0)
 		{
+			if($this->args['noitems'] == true) //Это если нам надо чтобы отображался только список а при попытке дернуть пост мы отдаем 404 ибо не надо чтобы читали по отдельности
+			{
+				$st = user_interface::get_instance('structure');
+				return $st->do_404();
+			}
 			return $this->get_item($res['item_id']);
 		}
 		if($res['item_id']==0 && $res['category_id'] >0)
@@ -57,6 +65,7 @@ class ui_www_article_front extends user_interface
 			$this->detected_category = $res['category_id'];
 			return $this->get_post_list($res['category_id']);
 		}
+		/* 2017-09-09 наверное это не надо 9*
 		if($res['id'] == 0 && SRCH_URI == '')
 		{
 			$possible_records =  $this->get_post_list();
@@ -65,6 +74,7 @@ class ui_www_article_front extends user_interface
 				return $possible_records;
 			}
 		}
+		*/
 		$st = user_interface::get_instance('structure');
 		return $st->do_404();
 	}
