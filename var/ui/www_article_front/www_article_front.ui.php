@@ -79,6 +79,7 @@ class ui_www_article_front extends user_interface
 			{
 				$di = data_interface::get_instance('www_article_url_indexer');
 				$args = $this->get_args();
+				dbg::write('locator call');
 				$res = $di->search_by_uri('/'.SRCH_URI,false,$args);
 				$this->locator_done = true;
 				$this->location = $res;

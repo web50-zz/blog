@@ -139,10 +139,15 @@ class di_www_article_indexer extends data_interface
 		{
 			$this->where = "(" . join(') AND (', $W) . ")";
 		}
+		/* Старый вариант с дополительным  каунтом записей
 		$data =	$this->extjs_grid_json(array(
 			'*',
 			'"' . data_interface::get_instance('www_article_files')->get_url() . '"' => 'url',
 		), false);
+		*/
+		$data['records'] = $this->_get()->get_results();
+		$data['files_url'] = data_interface::get_instance('www_article_files')->get_url();
+	
 		$this->pop_args();
 		return $data;
 
