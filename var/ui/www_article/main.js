@@ -20,7 +20,7 @@ ui.www_article.main = Ext.extend(ui.www_article.grid, {
 				var f = new ui.www_article.form();
 				var w = new Ext.Window({iconCls: this.iconCls, title: this.titleAdd, maximizable: true, modal: true, layout: 'fit', width: f.formWidth, height: f.formHeight, items: f});
 				f.on({
-					data_saved: function(){this.store.reload();},
+					data_saved: function(){this.store.reload();w.destroy()},
 					cancelled: function(){w.destroy()},
 					scope: this
 				});
@@ -151,7 +151,7 @@ ui.www_article.main = Ext.extend(ui.www_article.grid, {
 				e.stopEvent();  
 				cmenu.showAt(e.getXY());
 			},
-			dblrowclick: this.Edit,
+			rowdblclick: this.Edit,
 			scope: this
 		});
 	},
