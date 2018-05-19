@@ -223,6 +223,7 @@ class di_www_article_indexer extends data_interface
 			'file_type' => 'file_type', 
 			'real_name' => 'image',
 			'title'=>'title',
+			'comment'=>'comment',
 			array('di'=>$di2,'name'=>'prefix'),
 			array('di'=>$di2,'name'=>'not_available'),
 			array('di'=>$di2,'name'=>'is_image'),
