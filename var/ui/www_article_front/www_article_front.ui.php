@@ -227,6 +227,10 @@ class ui_www_article_front extends user_interface
 		$id = $this->get_args('_sid',0);
 		$item_body_class = $this->get_args('item_body_class','');
 		$data = $di->get_record($id);
+		if(!isset($data)) 
+		{
+		    $data = new stdClass();
+		}
 		$data->args = $args;
 
 		if($item_body_class != '')
