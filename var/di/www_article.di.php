@@ -85,7 +85,7 @@ class di_www_article extends data_interface
 	}
 
 
-	protected function sys_set()
+	public function sys_set()
 	{
 		$fid = $this->get_args('_sid');
 		$silent = $this->get_args('silent',false);
