@@ -145,9 +145,12 @@ class di_www_article_indexer extends data_interface
 			'"' . data_interface::get_instance('www_article_files')->get_url() . '"' => 'url',
 		), false);
 		*/
+		//$res = $this->extjs_grid_json(false,false);
+		//$data['records'] = $res['records'];
+		$this->set_order($this->args['sort'],$this->args['dir']);
+		$this->set_limit($this->args['start'],$this->args['limit']);
 		$data['records'] = $this->_get()->get_results();
 		$data['files_url'] = data_interface::get_instance('www_article_files')->get_url();
-	
 		$this->pop_args();
 		return $data;
 
