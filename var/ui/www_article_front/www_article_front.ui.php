@@ -218,6 +218,51 @@ class ui_www_article_front extends user_interface
 		return $this->parse_tmpl($template,$data);
 	}
 
+	/* 9* 2018-06-27 отдает блок записей по стартовому id в request*/
+	public function pub_get_range()
+	{
+		$di =  data_interface::get_instance('www_article_indexer');
+		$limit = $this->get_args('limit',5);
+		$post_type = $this->get_args('post_type');
+		$template = $this->get_args('template','list.html');
+		$category_id = $this->get_args('category_id','');
+		$sort = $this->get_args('sort','release_date');
+		$dir = $this->get_args('dir','DESC');
+		$page = 1;
+		$this->args['srch'] = array(
+			'sort'=>$sort,
+			'dir'=>$dir,
+			'start' => ($page - 1) * $limit,
+			'post_type'=>$post_type,
+			'limit'=>$limit,
+		);
+		if($post_type >0)
+		{
+			$this->args['srch']['post_type'] = $post_type;
+		}
+		if($category_id>0)
+		{
+			$this->args['srch']['category_id'] = $category_id;
+		}
+		$this->prepare_search();
+		$this->args['srch']['where'] = ' id > '.request::get('id');
+		$data = $di->get_list_by_srch($this->args['srch']);
+		$data['args'] = $this->args;
+		$data['PAGE_URI'] = PAGE_URI;
+		$data['SRHC_URI'] = SRCH_URI;
+		if(count($data) > 0)
+		{
+			$parsed =  $this->parse_tmpl($template,$data);
+		}
+		if($this->args['ajax'] == 1)
+		{
+			response::send(array('success'=>true,'data'=>$parsed),'JSON');
+		}
+		return $parsed;
+	}
+
+
+
 	//9* 01052014 получаем публикацию по ID
 	public function pub_get_item()
 	{

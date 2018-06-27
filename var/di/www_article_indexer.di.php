@@ -105,6 +105,10 @@ class di_www_article_indexer extends data_interface
 		$W = array();
 		$where = array();
 		//9* если задана категория, ищем по категории
+		if($srch['where'] != '')
+		{
+			array_push($where,$srch['where']);
+		}
 		if (!empty($srch['category_id']))
 		{
 			$where[] = "MATCH (`categories`) AGAINST ('\"".$srch['category_id']."\"' IN BOOLEAN MODE)";
