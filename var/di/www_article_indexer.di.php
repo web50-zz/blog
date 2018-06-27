@@ -231,6 +231,7 @@ class di_www_article_indexer extends data_interface
 			'real_name' => 'image',
 			'title'=>'title',
 			'comment'=>'comment',
+			'order'=>'order',
 			array('di'=>$di2,'name'=>'prefix'),
 			array('di'=>$di2,'name'=>'not_available'),
 			array('di'=>$di2,'name'=>'is_image'),
@@ -239,6 +240,7 @@ class di_www_article_indexer extends data_interface
 			array('di'=>$di2,'name'=>'title'),
 
 			);
+		$di->set_order('order','ASC');
 		$di->_get();
 		$data = array('images' => $this->json_enc($di->get_results()));
 		$di->pop_args();
