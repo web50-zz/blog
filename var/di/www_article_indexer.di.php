@@ -49,6 +49,7 @@ class di_www_article_indexer extends data_interface
 		'comments' => array('type' => 'string'),
 		'tags' => array('type' => 'string'),
 		'images' => array('type' => 'string'),
+		'text_blocks' => array('type' => 'string'),
 		'unique_visitors' => array('type' => 'integer'),
 		'total_visitors' => array('type' => 'integer'),
 		'like' => array('type' => 'integer'),
@@ -254,6 +255,33 @@ class di_www_article_indexer extends data_interface
 		$this->_set();
 		$this->pop_args();
 	}
+	protected function update_text_blocks($id)
+	{
+		// Собираем изображения
+		$di = data_interface::get_instance('www_article_text_blocks');
+		$di->_flush();
+		$di->push_args(array('_sitem_id' => $id));
+		$di2 = $di->join_with_di('www_article_text_blocks_types',array('block_type'=>'id'),array('title'=>'block_type_title'));
+		$di->what = array(
+			'block_type' => 'block_type', 
+			'content' => 'content',
+			'published'=>'published',
+			array('di'=>$di2,'name'=>'title'),
+			);
+		$di->set_order('order','ASC');
+		$di->_get();
+		$data = array('text_blocks' => $this->json_enc($di->get_results()));
+		$di->pop_args();
+
+		// Обновляем данные
+		$this->_flush();
+		$this->push_args($data);
+		$this->set_args(array('_sitem_id' => $id), true);
+		$this->insert_on_empty = true;
+		$this->_set();
+		$this->pop_args();
+	}
+
 	protected function update_categories($id)
 	{
 		// Собираем 
@@ -347,6 +375,7 @@ class di_www_article_indexer extends data_interface
 			$this->update_categories($ids);
 			$this->update_tags($ids);
 			$this->update_comments($ids);
+			$this->update_text_blocks($ids);
 		}
 		else if (is_array($ids))
 		{
@@ -357,6 +386,7 @@ class di_www_article_indexer extends data_interface
 				$this->update_categories($id);
 				$this->update_tags($id);
 				$this->update_comments($ids);
+				$this->update_text_blocks($ids);
 			}
 		}
 		else
@@ -444,6 +474,27 @@ class di_www_article_indexer extends data_interface
 	{
 		if (!empty($this->removeable_id))
 			$this->update_comments($this->removeable_id);
+	}
+	public function article_text_blocks_set($eObj, $ids, $args)
+	{
+		if (($id = (int)$args['item_id']) == 0 && !empty($args['_sitem_id']))
+			$id = (int)$args['_sitem_id'];
+
+		$this->update_text_blocks($id);
+	}
+
+	public function article_text_blocks_prepare_unset($eObj, $args)
+	{
+		if (($id = (int)$args['item_id']) == 0 && !empty($args['_sitem_id']))
+			$id = (int)$args['_sitem_id'];
+		
+		$this->removeable_id = $id;
+	}
+
+	public function article_text_blocks_unset($eObj, $ids, $args)
+	{
+		if (!empty($this->removeable_id))
+			$this->update_text_blocks($this->removeable_id);
 	}
 
 	/**
@@ -574,6 +625,9 @@ class di_www_article_indexer extends data_interface
 			array('di' => 'www_article_comment', 'event' => 'onSet', 'handler' => 'article_comment_set'),
 			array('di' => 'www_article_comment', 'event' => 'onBeforeUnset', 'handler' => 'article_comment_prepare_unset'),
 			array('di' => 'www_article_comment', 'event' => 'onUnset', 'handler' => 'article_comment_unset'),
+			array('di' => 'www_article_text_blocks', 'event' => 'onSet', 'handler' => 'article_text_blocks_set'),
+			array('di' => 'www_article_text_blocks', 'event' => 'onBeforeUnset', 'handler' => 'article_text_blocks_prepare_unset'),
+			array('di' => 'www_article_text_blocks', 'event' => 'onUnset', 'handler' => 'article_text_blocks_unset'),
 
 		);
 	}

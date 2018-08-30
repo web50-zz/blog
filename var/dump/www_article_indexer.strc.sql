@@ -19,6 +19,7 @@ CREATE TABLE `www_article_indexer` (
   `categories` text NOT NULL,
   `tags` text NOT NULL,
   `images` text NOT NULL,
+  `text_blocks` text NOT NULL,
   `unique_visitors` mediumint(8) unsigned NOT NULL,
   `total_visitors` mediumint(8) unsigned NOT NULL,
   `comments` text NOT NULL,

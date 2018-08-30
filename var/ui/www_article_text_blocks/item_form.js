@@ -63,7 +63,7 @@ ui.www_article_text_blocks.item_form = Ext.extend(Ext.form.FormPanel, {
 			formHeight: 700,
 
 			lblTitle: 'Тема',
-			lblType: 'Опубликовано',
+			lblType: 'Тип',
 
 			loadText: 'Загрузка данных формы',
 
