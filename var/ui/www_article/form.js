@@ -33,6 +33,7 @@ ui.www_article.form = Ext.extend(Ext.form.FormPanel, {
 	bttComments: 'Комментарии',
 	bttCategory: 'Входит в категории',
 	bttTags:'Тэги',
+	bttTextBlocks:'Текстовые блоки',
 
 	Load: function(data){
 		var f = this.getForm();
@@ -93,6 +94,7 @@ ui.www_article.form = Ext.extend(Ext.form.FormPanel, {
 			items: [
 				{iconCls: 'chart_organisation', text: this.bttCategory, handler: this.itemCategory, scope: this},
 				{iconCls: 'application_view_tile', text: this.bttFiles, handler: this.filesList, scope: this},
+				{iconCls: 'application_view_tile', text: this.bttTextBlocks, handler: this.textBlocks, scope: this},
 				{iconCls: 'application_view_tile', text: this.bttComments, handler: this.commentsList, scope: this},
 				{iconCls: 'application_view_tile', text: this.bttTags, handler: this.tagsList, scope: this}
 			]
@@ -317,6 +319,30 @@ ui.www_article.form = Ext.extend(Ext.form.FormPanel, {
 			scope: this
 		});
 		app.Load('www_article_comment', 'main');
+	},
+	textBlocks: function(b, e){
+		var fm = this.getForm();
+		var vals = fm.getValues();
+		if(!(vals._sid>0)){
+			showError(this.msgNotDefined);
+			return;
+		}
+		var app = new App({waitMsg: 'Загрузка формы'});
+		app.on({
+			apploaded: function(){
+				var f = new ui.www_article_text_blocks.main();
+				f.setParams({'_sitem_id':vals._sid});
+				var w = new Ext.Window({iconCls: b.iconCls, title: b.text, maximizable: true, modal: true, layout: 'fit', width: 500, height: 400, items: f});
+				f.on({
+					cancelled: function(){w.destroy()},
+					scope: this
+				});
+				w.show(null, function(){});
+			},
+			apperror: showError,
+			scope: this
+		});
+		app.Load('www_article_text_blocks', 'main');
 	},
 
 	/**
