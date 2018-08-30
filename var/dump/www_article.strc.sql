@@ -9,6 +9,7 @@ CREATE TABLE `www_article` (
   `published_date` datetime DEFAULT NULL,
   `post_type` tinyint(3) unsigned NOT NULL DEFAULT '1',
   `title` varchar(255) NOT NULL DEFAULT '',
+  `service_comment` varchar(255) NOT NULL DEFAULT '',
   `author` varchar(255) NOT NULL DEFAULT '',
   `source` varchar(255) NOT NULL,
   `brief` text NOT NULL,

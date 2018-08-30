@@ -3,6 +3,7 @@ ui.www_article.grid = Ext.extend(Ext.grid.EditorGridPanel, {
 	clmnId:"Id",
 	clmnDate:'Дата релиза',
 	clmnPostType:'Тип поста',
+	clmnServiceComment:'Служебный комент',
 	pagerSize: 50,
 	pagerEmptyMsg: 'Нет записей',
 	pagerDisplayMsg: 'Записи с {0} по {1}. Всего: {2}',
@@ -68,6 +69,7 @@ ui.www_article.grid = Ext.extend(Ext.grid.EditorGridPanel, {
 						{name: 'release_date', type: 'date', dateFormat: 'Y-m-d H:i:s'},
 						'uri',
 						'post_type_title',
+						'service_comment',
 						'title'
 					]
 				),
@@ -99,7 +101,8 @@ ui.www_article.grid = Ext.extend(Ext.grid.EditorGridPanel, {
 					{header: this.clmnId, dataIndex: 'id', width:70},
 					{header: this.clmnPostType, dataIndex: 'post_type_title'},
 					{header: this.clmnDate, id: 'release_date', dataIndex: 'release_date', width: 150, sortable: true, renderer: formatDate, editor: new fm.DateField({allowBlank: false, format: 'Y-m-d H:i:s'}), sortable: true},
-					{header: this.clmnTitle, id: 'expand', dataIndex: 'title', editor: new fm.TextField({maxLength: 255, maxLengthText: 'Не больше 255 символов'})}
+					{header: this.clmnTitle, dataIndex: 'title', editor: new fm.TextField({maxLength: 255, maxLengthText: 'Не больше 255 символов'})},
+					{header: this.clmnServiceComment, id: 'expand', dataIndex: 'service_comment', editor: new fm.TextField({maxLength: 255, maxLengthText: 'Не больше 255 символов'})}
 				]
 			}),
 			bbar: new Ext.PagingToolbar({

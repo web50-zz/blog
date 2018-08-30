@@ -14,6 +14,7 @@ ui.www_article.form = Ext.extend(Ext.form.FormPanel, {
 	lblPostType:'Тип публикации',
 	lblChngDate: 'Изменено',
 	lblPublishDate: 'Опубликовано',
+	lblServiceComment:'Служебный комментарий',
 
 	lblId: "Id",
 	saveText: 'Сохранение...',
@@ -136,6 +137,7 @@ ui.www_article.form = Ext.extend(Ext.form.FormPanel, {
 						{fieldLabel: this.lblSource, name: 'source', maxLength: 64, maxLengthText: 'Не больше 64 символов'},
 						{fieldLabel: this.lblAuthor, name: 'author', maxLength: 255, maxLengthText: 'Не больше 255 символов'},
 						{fieldLabel: this.lblURI, name: 'uri', maxLength: 255, maxLengthText: 'Не больше 255 символов'},
+						{fieldLabel: this.lblServiceComment, name: 'service_comment', maxLength: 255, maxLengthText: 'Не больше 255 символов',allowBlank: true},
 						{hideLabel: true, name: 'brief', xtype: 'ckeditor', CKConfig: {
 							height: 160,
 							toolbar: 'Basic',

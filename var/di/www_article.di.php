@@ -44,6 +44,7 @@ class di_www_article extends data_interface
 		'uri' => array('type' => 'string'),
 		'brief' => array('type' => 'text'),
 		'content' => array('type' => 'text'),
+		'service_comment' => array('type' => 'text'),
 		'published' => array('type' => 'integer'),
 	);
 	
@@ -69,6 +70,7 @@ class di_www_article extends data_interface
 				'uri', 
 				'title',
 				'post_type',
+				'service_comment',
 				array('di'=>$di,'name'=>'title'),
 				'release_date');
 		$this->extjs_grid_json($what);
