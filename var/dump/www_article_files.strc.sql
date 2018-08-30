@@ -9,6 +9,7 @@ CREATE TABLE `www_article_files` (
   `name` varchar(255) NOT NULL,
   `real_name` varchar(255) NOT NULL,
   `comment` text NOT NULL,
+  `reserved` text NOT NULL,
   `type` varchar(64) NOT NULL,
   `size` mediumint(8) unsigned NOT NULL,
   `width` smallint(5) unsigned NOT NULL,

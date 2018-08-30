@@ -231,6 +231,7 @@ class di_www_article_indexer extends data_interface
 			'real_name' => 'image',
 			'title'=>'title',
 			'comment'=>'comment',
+			'reserved'=>'reserved',
 			'order'=>'order',
 			array('di'=>$di2,'name'=>'prefix'),
 			array('di'=>$di2,'name'=>'not_available'),

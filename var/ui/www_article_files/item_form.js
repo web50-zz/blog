@@ -59,13 +59,14 @@ ui.www_article_files.item_form = Ext.extend(Ext.form.FormPanel, {
 	constructor: function(config){
 		config = config || {};
 		Ext.apply(this, {
-			formWidth: 400,
-			formHeight: 240,
+			formWidth: 500,
+			formHeight: 440,
 
 			lblTitle: 'Наименование',
 			lblType: 'Тип',
 
 			loadText: 'Загрузка данных формы',
+			lblReserved: 'Разное',
 
 			saveText: 'Сохранение...',
 			lblFile: 'Файл',
@@ -81,7 +82,7 @@ ui.www_article_files.item_form = Ext.extend(Ext.form.FormPanel, {
 		Ext.apply(this, {
 			frame: true, 
 			fileUpload: true,
-			defaults: {xtype: 'textfield', width: 150, anchor: '100%'},
+			defaults: {xtype: 'textfield', width: 250, anchor: '100%'},
 			items: [
 				{name: '_sid', inputType: 'hidden'},
 				{name: 'item_id', inputType: 'hidden'},
@@ -102,7 +103,8 @@ ui.www_article_files.item_form = Ext.extend(Ext.form.FormPanel, {
 						}),
 						mode: 'local', triggerAction: 'all', selectOnFocus: true, editable: false
 				},
-				{fieldLabel: this.lblDescr, name: 'comment', xtype: 'textarea'}
+				{fieldLabel: this.lblDescr, name: 'comment', xtype: 'textarea'},
+				{fieldLabel: this.lblReserved, name: 'reserved', xtype: 'textarea'}
 			],
 			buttonAlign: 'right',
 			buttons: [

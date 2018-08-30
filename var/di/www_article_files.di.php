@@ -42,6 +42,7 @@ class di_www_article_files extends data_interface
 		'name' => array('type' => 'string'),
 		'real_name' => array('type' => 'string'),
 		'comment' => array('type' => 'text'),
+		'reserved' => array('type' => 'text'),
 		'type' => array('type' => 'string'),
 		'size' => array('type' => 'integer'),
 		'width' => array('type' => 'integer'),
