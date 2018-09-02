@@ -171,6 +171,7 @@ class ui_www_article_front extends user_interface
 	//9*  метод для вывода на морду  списка постов  по задаваемымы  в вьюпоинте  параметрам вплоть до шаблона вывода
 	public function pub_get_list_parametric()
 	{
+		$st=user_interface::get_instance('structure');
 		$di =  data_interface::get_instance('www_article_indexer');
 		$limit = $this->get_args('limit',5);
 		$post_type = $this->get_args('post_type');
@@ -204,7 +205,6 @@ class ui_www_article_front extends user_interface
 		if($enable_pager == true)
 		{
 			$pager = user_interface::get_instance('pager');
-			$st=user_interface::get_instance('structure');
 			$st->collect_resources($pager,'pager');
 			$data['pager'] =$pager->get_pager(array('page' => $page, 'total' => $data['total'], 'limit' => $limit, 'prefix' => $_SERVER['QUERY_STRING']));
 		}
@@ -215,12 +215,16 @@ class ui_www_article_front extends user_interface
 		{
 			$data['category'] = $cdata;
 		}
+
+		$page = $st->get_page_info();
+		$data['params_json'] = $page['params_json']; //это для передачи в парсер общих сдля страницы параметров например локали заданной в джейсоне
 		return $this->parse_tmpl($template,$data);
 	}
 
 	/* 9* 2018-06-27 отдает блок записей по стартовому id в request*/
 	public function pub_get_range()
 	{
+		$st=user_interface::get_instance('structure');
 		$di =  data_interface::get_instance('www_article_indexer');
 		$limit = $this->get_args('limit',5);
 		$post_type = $this->get_args('post_type');
@@ -250,6 +254,9 @@ class ui_www_article_front extends user_interface
 		$data['args'] = $this->args;
 		$data['PAGE_URI'] = PAGE_URI;
 		$data['SRHC_URI'] = SRCH_URI;
+
+		$page = $st->get_page_info();
+		$data['params_json'] = $page['params_json']; //это для передачи в парсер общих сдля страницы параметров например локали заданной в джейсоне
 		if(count($data) > 0)
 		{
 			$parsed =  $this->parse_tmpl($template,$data);
@@ -272,6 +279,7 @@ class ui_www_article_front extends user_interface
 		$id = $this->get_args('_sid',0);
 		$item_body_class = $this->get_args('item_body_class','');
 		$data = $di->get_record($id);
+		$st = user_interface::get_instance('structure');
 		if(!isset($data)) 
 		{
 		    $data = new stdClass();
@@ -280,7 +288,6 @@ class ui_www_article_front extends user_interface
 
 		if($item_body_class != '')
 		{
-			$st=user_interface::get_instance('structure');
 			$st->add_body_class($item_body_class);
 		}
 
@@ -288,6 +295,8 @@ class ui_www_article_front extends user_interface
 		{
 			return $data->content;
 		}
+		$page = $st->get_page_info();
+		$data->params_json = $page['params_json']; //это для передачи в парсер общих сдля страницы параметров например локали заданной в джейсоне
 		return $this->parse_tmpl($template,$data);
 	}
 
