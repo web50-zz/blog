@@ -31,7 +31,6 @@ class di_www_article_indexer extends data_interface
 		'item_id' => array('type' => 'integer'),
 		'creator_uid' => array('type' => 'integer'),
 		'changer_uid' => array('type' => 'integer'),
-		'item_id' => array('type' => 'integer'),
 		'record_created_date' => array('type' => 'date'),
 		'record_changed_date' => array('type' => 'date'),
 		'changed_date' => array('type' => 'date'),
