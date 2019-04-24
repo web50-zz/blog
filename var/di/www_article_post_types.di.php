@@ -33,6 +33,7 @@ class di_www_article_post_types extends data_interface
 		'not_available' => array('type' => 'integer'),
 		'title' => array('type' => 'string'),
 		'uri' => array('type' => 'string'),
+		'root_page_id' => array('type' => 'integer'),
 	);
 	
 	public function __construct () {
