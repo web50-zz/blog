@@ -23,7 +23,7 @@
 
 LOCK TABLES `www_article_post_types` WRITE;
 /*!40000 ALTER TABLE `www_article_post_types` DISABLE KEYS */;
-INSERT INTO `www_article_post_types` VALUES (1,1,'Пост','blog',0),(2,2,'Сервис','services',0);
+INSERT INTO `www_article_post_types` VALUES (1,1,'Пост','blog',0,''),(2,2,'Сервис','services',0,'');
 /*!40000 ALTER TABLE `www_article_post_types` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
