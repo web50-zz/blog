@@ -138,6 +138,11 @@ class di_www_article_indexer extends data_interface
 		{
 			$W[] = "`post_type` = {$srch['post_type']}";
 		}
+		//9* если задан флаг published, фильтруем по published
+		if (!empty($srch['published']))
+		{
+			$W[] = "`published` = {$srch['published']}";
+		}
 
 		if (!empty($W))
 		{
@@ -153,7 +158,9 @@ class di_www_article_indexer extends data_interface
 		//$data['records'] = $res['records'];
 		$this->set_order($this->args['sort'],$this->args['dir']);
 		$this->set_limit($this->args['start'],$this->args['limit']);
-		$data['records'] = $this->_get()->get_results();
+		$data = $this->extjs_grid_json(false,false);
+		//$data['records'] = $this->_get()->get_results(); //для пейджера нужен total а так его нет
+		
 		$data['files_url'] = data_interface::get_instance('www_article_files')->get_url();
 		$this->pop_args();
 		return $data;
@@ -212,6 +219,17 @@ class di_www_article_indexer extends data_interface
 
 		// Обновляем данные
 		$this->_flush();
+		//mariaDB emptyvdate fix
+		if($data['release_date'] == ''){
+			unset($data['release_date']);
+		}
+		if($data['changed_date'] == ''){
+			unset($data['changed_date']);
+		}
+		if($data['published_date'] == ''){
+			unset($data['published_date']);
+		}
+
 		$this->push_args($data);
 		$this->set_args(array('_sitem_id' => $id), true);
 		$this->insert_on_empty = true;
@@ -265,9 +283,10 @@ class di_www_article_indexer extends data_interface
 			'block_type' => 'block_type', 
 			'content' => 'content',
 			'published'=>'published',
+			'title'=>'title',
 			array('di'=>$di2,'name'=>'title'),
 			);
-		$di->set_order('order','ASC');
+		$di->set_order('id','ASC');
 		$di->_get();
 		$data = array('text_blocks' => $this->json_enc($di->get_results()));
 		$di->pop_args();

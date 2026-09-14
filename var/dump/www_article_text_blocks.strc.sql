@@ -5,8 +5,9 @@ CREATE TABLE `www_article_text_blocks` (
   `item_id` int(11) unsigned NOT NULL,
   `block_type` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `content` text NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `order` int(11) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `public` (`published`),
   KEY `item_id` (`item_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-
+) ENGINE=InnoDB DEFAULT CHARSET=utf8

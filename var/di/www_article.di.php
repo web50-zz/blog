@@ -65,6 +65,21 @@ class di_www_article extends data_interface
 		{
 			$this->sys_search_by_category();
 		}
+		$sWhere = array();
+		if (($sidVal = $this->get_args('_sid')))
+		{
+			$sWhere[] = "`{$this->name}`.`id` LIKE '%" . $sidVal . "%'";
+			unset($this->args['_sid']);
+		}
+		if (($dateVal = $this->get_args('_srelease_date')))
+		{
+			$sWhere[] = "DATE_FORMAT(`release_date`, '%d.%m.%Y') LIKE '%" . $dateVal . "%'";
+			unset($this->args['_srelease_date']);
+		}
+		if (!empty($sWhere))
+		{
+			$this->where = join(' AND ', $sWhere);
+		}
 		$what = array('id', 
 				'order', 
 				'uri', 
@@ -91,6 +106,16 @@ class di_www_article extends data_interface
 	{
 		$fid = $this->get_args('_sid');
 		$silent = $this->get_args('silent',false);
+		//mariaDB emptyvdate fix
+		if($this->args['release_date'] == ''){
+			unset($this->args['release_date']);
+		}
+		if($this->args['changed_date'] == ''){
+			unset($this->args['changed_date']);
+		}
+		if($this->args['published_date'] == ''){
+			unset($this->args['published_date']);
+		}
 		try{
 			$this->check_input();
 			// ниже больше не надо

@@ -1,8 +1,8 @@
 CREATE TABLE `www_article_indexer` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `item_id` int(10) unsigned NOT NULL,
-  `creator_uid` int(11) DEFAULT NULL,
-  `changer_uid` int(11) DEFAULT NULL,
+  `creator_uid` int(11) unsigned NOT NULL DEFAULT '0',
+  `changer_uid` int(11) unsigned NOT NULL DEFAULT '0',
   `record_created_date` datetime DEFAULT NULL,
   `record_changed_date` datetime DEFAULT NULL,
   `changed_date` datetime DEFAULT NULL,
@@ -22,8 +22,8 @@ CREATE TABLE `www_article_indexer` (
   `text_blocks` text NOT NULL,
   `unique_visitors` mediumint(8) unsigned NOT NULL,
   `total_visitors` mediumint(8) unsigned NOT NULL,
-  `comments` text NOT NULL,
-  `order` int(11) unsigned NOT NULL DEFAULT '0',
+  `comments` text,
+  `order` int(11) unsigned NOT NULL,
   `like` mediumint(8) unsigned NOT NULL,
   `dislike` mediumint(8) unsigned NOT NULL,
   PRIMARY KEY (`id`),
@@ -35,4 +35,4 @@ CREATE TABLE `www_article_indexer` (
   KEY `release_date` (`release_date`),
   FULLTEXT KEY `tags` (`tags`),
   FULLTEXT KEY `categories` (`categories`)
-) ENGINE=MyISAM AUTO_INCREMENT=238 DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8

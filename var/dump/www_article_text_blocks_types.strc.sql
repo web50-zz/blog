@@ -5,6 +5,4 @@ CREATE TABLE `www_article_text_blocks_types` (
   `not_available` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `order` (`order`)
-) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
-
-
+) ENGINE=InnoDB DEFAULT CHARSET=utf8

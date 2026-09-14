@@ -45,7 +45,8 @@ ui.www_article_text_blocks.grid = Ext.extend(Ext.grid.EditorGridPanel, {
 						{name: 'published', type: 'int'},
 						'published',
 						'text_blocks_type_str',
-						'block_type' 
+						'block_type',
+						'title' 
 					]
 				),
 				writer: new Ext.data.JsonWriter({
@@ -78,8 +79,8 @@ ui.www_article_text_blocks.grid = Ext.extend(Ext.grid.EditorGridPanel, {
 				},
 				columns: [
 					{header: 'ID', dataIndex: 'id'},
-					//{header: 'Опубликовано',  dataIndex: 'published', renderer: function(v){return (v > 0) ? 'Опубликован' : 'Не опубликован'}, align: 'left'},
-					{header: 'Тип',  dataIndex: 'text_blocks_type_str', id: 'expand'}
+					{header: 'Порядок', dataIndex: 'order', width: 60},
+					{header: 'Название', dataIndex: 'title', id: 'expand'}
 				]
 			})
 		});

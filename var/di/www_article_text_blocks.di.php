@@ -31,8 +31,10 @@ class di_www_article_text_blocks extends data_interface
 		'created_datetime' => array('type' => 'datetime'),
 		'published' => array('type' => 'integer'),
 		'item_id' => array('type' => 'integer'),
+		'order' => array('type' => 'integer'),
 		'block_type' => array('type' => 'string'),
 		'content' => array('type' => 'string'),
+		'title' => array('type' => 'string'),
 	);
 	
 	public function __construct ()
@@ -58,11 +60,13 @@ class di_www_article_text_blocks extends data_interface
 
 		$this->extjs_grid_json(array(
 			'id',
+			'order',
 			'created_datetime',
 			'published',
 			'item_id',
 			'block_type',
 			array('di'=>$di,'name'=>'title'),
+			'title',
 			'content',
 		));
 	}
@@ -84,9 +88,10 @@ class di_www_article_text_blocks extends data_interface
 	public function sys_set($silent = false)
 	{
 		$this->_flush();
-		if(!$this->args['_sid'])
+		if(!$this->get_args('_sid'))
 		{
 			$this->args['created_datetime'] = date('Y-m-d H:i:s');
+			$this->args['order'] = $this->get_new_order($this->get_args('item_id'));
 		}
 		$this->insert_on_empty = true;
 		$res =	$this->extjs_set_json(false,false);
@@ -159,6 +164,32 @@ class di_www_article_text_blocks extends data_interface
 		$this->pop_args();
 	}
 
+
+	private function get_new_order($item_id = 0)
+	{
+		$this->_flush();
+		$where = $item_id > 0 ? " WHERE `item_id` = " . intval($item_id) : '';
+		$this->_get("SELECT MAX(`order`) + 1 AS `order` FROM `{$this->name}`{$where}");
+		return $this->get_results(0, 'order');
+	}
+
+	/**
+	*	Реорганизация порядка вывода
+	*/
+	protected function sys_reorder()
+	{
+		list($npos, $opos) = array_values($this->get_args(array('npos', 'opos')));
+		$values = $this->get_args(array('opos', 'npos', 'id', 'cid'));
+
+		if ($opos < $npos)
+			$query = "UPDATE `{$this->name}` SET `order` = IF(`id` = :id, :npos, `order` - 1) WHERE `order` >= :opos AND `order` <= :npos AND `item_id` = :cid";
+		else
+			$query = "UPDATE `{$this->name}` SET `order` = IF(`id` = :id, :npos, `order` + 1) WHERE `order` >= :npos AND `order` <= :opos AND `item_id` = :cid";
+
+		$this->_flush();
+		$this->connector->exec($query, $values);
+		response::send(array('success' => true), 'json');
+	}
 
 	public function _listeners()
 	{

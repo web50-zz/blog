@@ -11,4 +11,4 @@ CREATE TABLE `www_article_rating` (
   KEY `article_id` (`article_id`),
   KEY `visitor_ip` (`visitor_ip`),
   KEY `session_id` (`session_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8

@@ -297,6 +297,9 @@ class ui_www_article_front extends user_interface
 		}
 		$page = $st->get_page_info();
 		$data->params_json = $page['params_json']; //это для передачи в парсер общих сдля страницы параметров например локали заданной в джейсоне
+		$data->brief_no_trail = preg_replace('/<\/p>$/','',preg_replace('/^<p>/','',$data->brief));
+		$data->content_no_trail = preg_replace('/<\/p>$/','',preg_replace('/^<p>/','',$data->content));
+
 		return $this->parse_tmpl($template,$data);
 	}
 

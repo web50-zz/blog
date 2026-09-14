@@ -26,4 +26,4 @@ CREATE TABLE `www_article` (
   KEY `total_visitors` (`total_visitors`),
   KEY `like` (`like`),
   KEY `dislike` (`dislike`)
-) ENGINE=MyISAM AUTO_INCREMENT=238 DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8

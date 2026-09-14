@@ -1,0 +1,36 @@
+<?php
+class ui_www_article_post_types extends user_interface
+{
+	public $title = 'www: Публикации - типы постов';
+
+	protected $deps = array(
+		'main' => array(
+			'www_article_post_types.grid',
+		),
+	);
+	
+	public function __construct ()
+	{
+		parent::__construct(__CLASS__);
+		$this->files_path = dirname(__FILE__).'/'; 
+	}
+	
+	public function sys_main()
+	{
+		$tmpl = new tmpl($this->pwd() . 'main.js');
+		response::send($tmpl->parse($this), 'js');
+	}
+	
+	public function sys_grid()
+	{
+		$tmpl = new tmpl($this->pwd() . 'grid.js');
+		response::send($tmpl->parse($this), 'js');
+	}
+	
+	public function sys_form()
+	{
+		$tmpl = new tmpl($this->pwd() . 'form.js');
+		response::send($tmpl->parse($this), 'js');
+	}
+}
+?>

@@ -11,4 +11,4 @@ CREATE TABLE `www_article_comment` (
   PRIMARY KEY (`id`),
   KEY `public` (`published`),
   KEY `item_id` (`item_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8

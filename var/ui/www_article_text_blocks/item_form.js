@@ -62,7 +62,7 @@ ui.www_article_text_blocks.item_form = Ext.extend(Ext.form.FormPanel, {
 			formWidth: 800,
 			formHeight: 700,
 
-			lblTitle: 'Тема',
+			lblTitle: 'Заголовок',
 			lblType: 'Тип',
 
 			loadText: 'Загрузка данных формы',
@@ -86,6 +86,7 @@ ui.www_article_text_blocks.item_form = Ext.extend(Ext.form.FormPanel, {
 			items: [
 				{name: '_sid', inputType: 'hidden'},
 				{name: 'item_id', inputType: 'hidden'},
+				{name: 'order', inputType: 'hidden'},
 				{fieldLabel: this.lblType, hiddenName: 'block_type', xtype: 'combo', allowBlank: false,
 						valueField: 'id', displayField: 'title', value: '', emptyText: '', 
 						store: new Ext.data.JsonStore({url: 'di/www_article_text_blocks_types/type_list.json', root: 'records', fields: ['id', 'title'], autoLoad: true,
@@ -101,6 +102,7 @@ ui.www_article_text_blocks.item_form = Ext.extend(Ext.form.FormPanel, {
 						}),
 						mode: 'local', triggerAction: 'all', selectOnFocus: true, editable: false
 				},
+				{fieldLabel: this.lblTitle, name: 'title', maxLength: 255, maxLengthText: 'Не больше 255 символов',allowBlank: true},
 				{fieldLabel: this.lblPublished, hiddenName: 'published', value: 1, xtype: 'combo', width: 50, anchor: null,
 							store: new Ext.data.SimpleStore({ fields: ['value', 'title'], data: [[1, 'Да'], [0, 'Нет']] }),
 							valueField: 'value', displayField: 'title', mode: 'local', triggerAction: 'all', selectOnFocus: true, editable: false
