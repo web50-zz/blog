@@ -329,6 +329,11 @@ class ui_www_article_front extends user_interface
 			$st->add_body_class($item_body_class);
 		}
 
+		$site = registry::get('SITE_URL');
+		$data->jsonld_article = !empty($this->location['item_id']) && $site && class_exists('lib_jsonld')
+			? lib_jsonld::article((array)$data, $site)
+			: '';
+
 		return $this->parse_tmpl($template,$data);
 	}
 
@@ -432,7 +437,8 @@ class ui_www_article_front extends user_interface
 			$res = $di->_get()->get_results(0);
 			$data[] = array('title'=>$res->title,'name'=>$res->uri,'uri'=>'/'.$res->uri.'/');
 		}
-		return $this->parse_tmpl('trunc.html',$data);
+		$site = registry::get('SITE_URL');
+		return ($site && class_exists('lib_jsonld') ? lib_jsonld::breadcrumb_list($data, $site) : '') . $this->parse_tmpl('trunc.html',$data);
 	}
 	/* 9* 12022016 Выводит список  публикаций входящих в подкатеггории указанной категории  сгруппированный по подкатегориям */
 	public function pub_sub_list_by_category()
